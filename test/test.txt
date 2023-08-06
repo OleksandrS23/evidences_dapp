@@ -8,16 +8,16 @@ F-5: 0x7fcD302aCe4B41EEF2b89008E61abF34352Bf2BF
 G-6: 0x1f308ec3B28CfC1C6f9eE704bD230Ef7d881a320
 
 let hw = await HelloWorld.new()
-let ec = await evidenceChain.new()
+let ec = await EvidenceChain.new()
 evidenceChain.deployed().then(function(instance) {return instance });
 helloWorld.deployed().then(function(instance) {return instance });
 
 // Create 3 Police participants (A, B, C)
-evidenceChain.deployed().then(function(instance) {return instance.addParticipant("A","passA","0xc1065A190c3A6E3e33A51B67C46353f3818D2dB0","Police") });
-evidenceChain.deployed().then(function(instance) {return instance.addParticipant("B","passB","0x8FA1057c51291B439Bd965D4088E33afFf421e34","Police") });
-evidenceChain.deployed().then(function(instance) {return instance.addParticipant("C","passC","0x7C6eB79907BD8ddab9a973B6b6AB9Cb90e048C53","Police") });
+EvidenceChain.deployed().then(function(instance) {return instance.addParticipant("A","passA","0xc1065A190c3A6E3e33A51B67C46353f3818D2dB0","Police") });
+EvidenceChain.deployed().then(function(instance) {return instance.addParticipant("TEST","passA","0xFE2B5b2470d64C211DDDCB3eF2b613b190F8C3c2","Police") });
+EvidenceChain.deployed().then(function(instance) {return instance.addParticipant("C","passC","0x7C6eB79907BD8ddab9a973B6b6AB9Cb90e048C53","Police") });
 
-ec.addParticipant("A","passA","0xc1065A190c3A6E3e33A51B67C46353f3818D2dB0","Police")
+ec.addParticipant("TEST","passA","0xFE2B5b2470d64C211DDDCB3eF2b613b190F8C3c2","Police")
 ec.addParticipant("B","passB","0x8FA1057c51291B439Bd965D4088E33afFf421e34","Police")
 ec.addParticipant("C","passC","0x7C6eB79907BD8ddab9a973B6b6AB9Cb90e048C53","Police")
 
@@ -38,7 +38,9 @@ evidenceChain.deployed().then(function(instance) {return instance.getParticipant
 evidenceChain.deployed().then(function(instance) {return instance.getParticipant(5)});
 evidenceChain.deployed().then(function(instance) {return instance.getParticipant(6)});
 
+EvidenceChain.deployed().then(function(instance) {return instance.getParticipantNoModifier(0)});
 ec.getParticipant(0)
+ec.getParticipantNoModifier(0)
 
 
 // Create 6 evidence 100, 101 (owned by A), 200, 201 (owned by B), 300, 301 (owned C)

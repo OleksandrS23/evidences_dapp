@@ -1,9 +1,9 @@
-import EvidenceChain from "../contracts/evidenceChain.json";
+import EvidenceChain from "../contracts/EvidenceChain.json";
 
 const options = {
   contracts: [EvidenceChain],
   events: {
-    EvidenceChain: ["TransferOwnership", "ParticipantAdded", "EvidenceAdded", "" ],
+    EvidenceChain: ["TransferOwnership", "ParticipantAdded", "EvidenceAdded" ],
   },
 };
 

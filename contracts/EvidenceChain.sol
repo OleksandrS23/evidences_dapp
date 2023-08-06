@@ -1,6 +1,6 @@
 pragma solidity >=0.8.0;
 
-contract evidenceChain {
+contract EvidenceChain {
     uint32 public evidence_id = 0;
     uint32 public participant_id = 0;
     uint32 public owner_id = 0;
@@ -14,13 +14,15 @@ contract evidenceChain {
 
     mapping(uint32 => evidence) public evidences;
 
-    struct participant {
+    struct Participant {
         string userName;
         string password;
         string participantType;
         address participantAddress;
     }
-    mapping(uint32 => participant) public participants;
+    //mapping(uint32 => participant) public participants;
+
+    Participant[] private participants;
 
     struct ownership {
         uint32 evidenceId;
@@ -28,6 +30,7 @@ contract evidenceChain {
         uint32 trxTimeStamp;
         address evidenceOwner;
     }
+
     mapping(uint32 => ownership) public ownerships;
     mapping(uint32 => uint32[]) public evidenceTrack;  
 
@@ -37,19 +40,29 @@ contract evidenceChain {
 
     function addParticipant(string memory _name, string memory _pass, address _pAdd, string memory _pType) public {
         uint32 userId = participant_id++;
-        participants[userId].userName = _name;
-        participants[userId].password = _pass;
-        participants[userId].participantAddress = _pAdd;
-        participants[userId].participantType = _pType;
+
+        participants.push(Participant(_name, _pass, _pType, _pAdd));
+        
+        // participants[userId].userName = _name;
+        // participants[userId].password = _pass;
+        // participants[userId].participantAddress = _pAdd;
+        // participants[userId].participantType = _pType;
 
         emit ParticipantAdded(userId);
     }
 
-    function getParticipant(uint32 _participant_id) onlyParticipant() public view returns (string memory,address,string memory) 
+    function getParticipants() onlyParticipant() public view returns (Participant[] memory){
+        return participants;
+    }
+
+    function getParticipant() public view returns (Participant memory) 
     {
-        return (participants[_participant_id].userName,
-                participants[_participant_id].participantAddress,
-                participants[_participant_id].participantType);
+        for (uint32 i = 0; i < participants.length; i++) {
+            if (participants[i].participantAddress == msg.sender) {
+                return participants[i];
+            }
+        }
+        revert("Participant not found");
     }
 
     modifier onlyParticipant() {
@@ -98,8 +111,8 @@ contract evidenceChain {
 
 
     function newOwner(uint32 _user1Id,uint32 _user2Id, uint32 _evidId) onlyOwner(_evidId) public returns (bool) {
-        participant memory p1 = participants[_user1Id];
-        participant memory p2 = participants[_user2Id];
+        Participant memory p1 = participants[_user1Id];
+        Participant memory p2 = participants[_user2Id];
         uint32 ownership_id = owner_id++;
 
         if(keccak256(abi.encodePacked(p1.participantType)) == keccak256("Police")
