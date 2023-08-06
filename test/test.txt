@@ -1,0 +1,99 @@
+Accounts:
+A-0: 0xc1065A190c3A6E3e33A51B67C46353f3818D2dB0
+B-1: 0x8FA1057c51291B439Bd965D4088E33afFf421e34
+C-2: 0x7C6eB79907BD8ddab9a973B6b6AB9Cb90e048C53
+D-3: 0x034f46154EB114f04027A3Be3b04ba0b0cAeb884
+E-4: 0x83C609034D4d695eC5e6219D5d9160C33D355065
+F-5: 0x7fcD302aCe4B41EEF2b89008E61abF34352Bf2BF
+G-6: 0x1f308ec3B28CfC1C6f9eE704bD230Ef7d881a320
+
+let hw = await HelloWorld.new()
+let ec = await evidenceChain.new()
+evidenceChain.deployed().then(function(instance) {return instance });
+helloWorld.deployed().then(function(instance) {return instance });
+
+// Create 3 Police participants (A, B, C)
+evidenceChain.deployed().then(function(instance) {return instance.addParticipant("A","passA","0xc1065A190c3A6E3e33A51B67C46353f3818D2dB0","Police") });
+evidenceChain.deployed().then(function(instance) {return instance.addParticipant("B","passB","0x8FA1057c51291B439Bd965D4088E33afFf421e34","Police") });
+evidenceChain.deployed().then(function(instance) {return instance.addParticipant("C","passC","0x7C6eB79907BD8ddab9a973B6b6AB9Cb90e048C53","Police") });
+
+ec.addParticipant("A","passA","0xc1065A190c3A6E3e33A51B67C46353f3818D2dB0","Police")
+ec.addParticipant("B","passB","0x8FA1057c51291B439Bd965D4088E33afFf421e34","Police")
+ec.addParticipant("C","passC","0x7C6eB79907BD8ddab9a973B6b6AB9Cb90e048C53","Police")
+
+// Create 2 Lab participants (D, E)
+evidenceChain.deployed().then(function(instance) {return instance.addParticipant("D","passD","0x034f46154EB114f04027A3Be3b04ba0b0cAeb884","Lab") });
+evidenceChain.deployed().then(function(instance) {return instance.addParticipant("E","passE","0x83C609034D4d695eC5e6219D5d9160C33D355065","Lab") });
+
+// Create 2 Court participants (F, G)
+evidenceChain.deployed().then(function(instance) {return instance.addParticipant("F","passF","0x7fcD302aCe4B41EEF2b89008E61abF34352Bf2BF","Court") });
+evidenceChain.deployed().then(function(instance) {return instance.addParticipant("G","passG","0x1f308ec3B28CfC1C6f9eE704bD230Ef7d881a320","Court") });
+
+// Get participant details
+evidenceChain.deployed().then(function(instance) {return instance.getParticipant(0)});
+evidenceChain.deployed().then(function(instance) {return instance.getParticipant(1)});
+evidenceChain.deployed().then(function(instance) {return instance.getParticipant(2)});
+evidenceChain.deployed().then(function(instance) {return instance.getParticipant(3)});
+evidenceChain.deployed().then(function(instance) {return instance.getParticipant(4)});
+evidenceChain.deployed().then(function(instance) {return instance.getParticipant(5)});
+evidenceChain.deployed().then(function(instance) {return instance.getParticipant(6)});
+
+ec.getParticipant(0)
+
+
+// Create 6 evidence 100, 101 (owned by A), 200, 201 (owned by B), 300, 301 (owned C)
+evidenceChain.deployed().then(function(instance) {return instance.addEvidence(0, "Evidence 0", "File") });
+evidenceChain.deployed().then(function(instance) {return instance.addEvidence(0, "Evidence 1", "File") });
+evidenceChain.deployed().then(function(instance) {return instance.addEvidence(1, "Evidence 2", "Image", {from: "0x8FA1057c51291B439Bd965D4088E33afFf421e34"}) });
+evidenceChain.deployed().then(function(instance) {return instance.addEvidence(1, "Evidence 3", "Image", {from: "0x8FA1057c51291B439Bd965D4088E33afFf421e34"}) });
+evidenceChain.deployed().then(function(instance) {return instance.addEvidence(2, "Evidence 4", "Bullet", {from: "0x7C6eB79907BD8ddab9a973B6b6AB9Cb90e048C53"}) });
+evidenceChain.deployed().then(function(instance) {return instance.addEvidence(2, "Evidence 5", "Bullet", {from: "0x7C6eB79907BD8ddab9a973B6b6AB9Cb90e048C53"}) });
+
+// Get evidence details
+evidenceChain.deployed().then(function(instance) {return instance.getEvidence(0) });
+evidenceChain.deployed().then(function(instance) {return instance.getEvidence(1) });
+evidenceChain.deployed().then(function(instance) {return instance.getEvidence(2) });
+evidenceChain.deployed().then(function(instance) {return instance.getEvidence(3) });
+evidenceChain.deployed().then(function(instance) {return instance.getEvidence(4) });
+evidenceChain.deployed().then(function(instance) {return instance.getEvidence(5) });
+
+// Move evidences along supply chain: Police=> Lab=> Court
+evidenceChain.deployed().then(function(instance) {return instance.newOwner(0, 3, 0, {from: "0xc1065A190c3A6E3e33A51B67C46353f3818D2dB0"}) });
+evidenceChain.deployed().then(function(instance) {return instance.newOwner(1, 3, 3, {from: "0x8FA1057c51291B439Bd965D4088E33afFf421e34"}) });
+evidenceChain.deployed().then(function(instance) {return instance.newOwner(2, 3, 4, {from: "0x7C6eB79907BD8ddab9a973B6b6AB9Cb90e048C53"}) });
+evidenceChain.deployed().then(function(instance) {return instance.newOwner(0, 3, 1, {from: "0xc1065A190c3A6E3e33A51B67C46353f3818D2dB0"}) });
+evidenceChain.deployed().then(function(instance) {return instance.newOwner(2, 4, 5, {from: "0x7C6eB79907BD8ddab9a973B6b6AB9Cb90e048C53"}) });
+evidenceChain.deployed().then(function(instance) {return instance.newOwner(1, 4, 2, {from: "0x8FA1057c51291B439Bd965D4088E33afFf421e34"}) });
+evidenceChain.deployed().then(function(instance) {return instance.newOwner(3, 6, 4, {from: "0x034f46154EB114f04027A3Be3b04ba0b0cAeb884"}) });
+evidenceChain.deployed().then(function(instance) {return instance.newOwner(3, 4, 1, {from: "0x034f46154EB114f04027A3Be3b04ba0b0cAeb884"}) });
+evidenceChain.deployed().then(function(instance) {return instance.newOwner(3, 4, 3, {from: "0x034f46154EB114f04027A3Be3b04ba0b0cAeb884"}) });
+evidenceChain.deployed().then(function(instance) {return instance.newOwner(4, 5, 2, {from: "0x83C609034D4d695eC5e6219D5d9160C33D355065"}) });
+evidenceChain.deployed().then(function(instance) {return instance.newOwner(3, 4, 0, {from: "0x034f46154EB114f04027A3Be3b04ba0b0cAeb884"}) });
+evidenceChain.deployed().then(function(instance) {return instance.newOwner(4, 6, 0, {from: "0x83C609034D4d695eC5e6219D5d9160C33D355065"}) });
+evidenceChain.deployed().then(function(instance) {return instance.newOwner(4, 5, 3, {from: "0x83C609034D4d695eC5e6219D5d9160C33D355065"}) });
+
+evidenceChain.deployed().then(function(instance) {return instance.getProvenance(0) });
+evidenceChain.deployed().then(function(instance) {return instance.getProvenance(1) });
+evidenceChain.deployed().then(function(instance) {return instance.getProvenance(2) });
+evidenceChain.deployed().then(function(instance) {return instance.getProvenance(3) });
+evidenceChain.deployed().then(function(instance) {return instance.getProvenance(4) });
+evidenceChain.deployed().then(function(instance) {return instance.getProvenance(5) });
+
+
+evidenceChain.deployed().then(function(instance) {return instance.getOwnership(5) });
+//
+//
+//
+
+function addParticipant(string name, string pass, address pAdd, string pType) public returns (uint)
+function getParticipant(uint p_id) public view returns (string,address,string)
+function addEvidence(uint own_id, string modelNumber, string partNumber, string serialNumber, uint productCost) public returns (uint)
+function getEvidence(uint prod_id) public view returns (string,string,string,uint,address,uint)
+
+function newOwner(uint user1_id ,uint user2_id, uint prod_id) onlyOwner(prod_id) public returns(bool)
+/* function getEvidenceRegistrationHistory(uint prod_id)  public  returns (registration[]) */
+function getOwnership(uint reg_id)  public view returns (uint,uint,address,uint)
+/* function getRegistraionList(uint prod_id) public returns (uint) */
+function authenticateParticipant(uint uid ,string uname ,string pass ,string utype) public view returns (bool)
+
+
