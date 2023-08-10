@@ -5,14 +5,16 @@ contract EvidenceChain {
     uint32 public participant_id = 0;
     uint32 public owner_id = 0;
 
-    struct evidence {
+    struct Evidence {
+        string evidenceUniqueCode;
         string evidenceName;
         string evidenceType;
         address evidenceOwner;
         uint32 mfgTimeStamp;
     }
 
-    mapping(uint32 => evidence) public evidences;
+    Evidence [] private evidences;
+    //mapping(uint32 => evidence) public evidences;
 
     struct Participant {
         string userName;
@@ -42,11 +44,6 @@ contract EvidenceChain {
         uint32 userId = participant_id++;
 
         participants.push(Participant(_name, _pass, _pType, _pAdd));
-        
-        // participants[userId].userName = _name;
-        // participants[userId].password = _pass;
-        // participants[userId].participantAddress = _pAdd;
-        // participants[userId].participantType = _pType;
 
         emit ParticipantAdded(userId);
     }
@@ -79,27 +76,55 @@ contract EvidenceChain {
     return false;
     }
 
+    function getParticipantId() internal view returns(int32) {
+    for (uint32 i = 0; i < participant_id; i++) {
+        if (participants[i].participantAddress == msg.sender) {
+            return int32(i);
+        }
+    }
+    return -1;
+    }
 
-    function addEvidence(uint32 _ownerId,
+
+    function addEvidence(string memory _evidenceUniqueCode,
                         string memory _evidenceName,
                         string memory _evidenceType) public 
     {
-        require(keccak256(abi.encodePacked(participants[_ownerId].participantType)) == keccak256("Police"),"Not Police.");
-
+        require(verifyEvidenceUniqueCode(_evidenceUniqueCode));
+        int32 _ownerId = getParticipantId();
+        require(_ownerId >= 0, "Not Found Participant!");
+        require(keccak256(abi.encodePacked(participants[uint32(_ownerId)].participantType)) == keccak256("Police"),"Not Police.");
+        
         uint32 evidenceId = evidence_id++;
 
-        evidences[evidenceId].evidenceName = _evidenceName;
-        evidences[evidenceId].evidenceType = _evidenceType;
-        evidences[evidenceId].evidenceOwner = participants[_ownerId].participantAddress;
-        evidences[evidenceId].mfgTimeStamp = uint32(block.timestamp);
+        evidences.push(Evidence(_evidenceUniqueCode, _evidenceName, _evidenceType, msg.sender, uint32(block.timestamp)));
+        
+        // evidences[evidenceId].evidenceName = _evidenceName;
+        // evidences[evidenceId].evidenceType = _evidenceType;
+        // evidences[evidenceId].evidenceOwner = participants[_ownerId].participantAddress;
+        // evidences[evidenceId].mfgTimeStamp = uint32(block.timestamp);
 
         emit EvidenceAdded(evidenceId);
     }
+
+    function verifyEvidenceUniqueCode(string memory _evidenceUniqueCode) internal view returns(bool) {
+    for (uint32 i = 0; i < evidence_id; i++) {
+        if (keccak256(bytes(evidences[i].evidenceUniqueCode)) == keccak256(bytes(_evidenceUniqueCode))) {
+            return false;
+        }
+    }
+    return true;
+    }
+
 
     modifier onlyOwner(uint32 _evidenceId) {
          require(msg.sender == evidences[_evidenceId].evidenceOwner,"");
          _;
 
+    }
+
+    function getEvidences() onlyParticipant() public view returns (Evidence[] memory){
+        return evidences;
     }
 
     function getEvidence(uint32 _evidenceId) public view returns (string memory,string memory,address,uint32){

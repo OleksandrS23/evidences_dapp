@@ -1,8 +1,5 @@
 import React from "react";
-import Card from 'react-bootstrap/Card';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import {Card, Row, Col, ListGroup} from 'react-bootstrap';
 
 function ParticipantsCard(props) {
     return (
@@ -16,7 +13,6 @@ function ParticipantsCard(props) {
                   < ListGroup.Item>{participant.participantType}</ListGroup.Item>
                   <ListGroup.Item>{participant.participantAddress}</ListGroup.Item>
                 </ListGroup>
-                {console.log(participant)}
            </Card>
            </Col >
           ))}

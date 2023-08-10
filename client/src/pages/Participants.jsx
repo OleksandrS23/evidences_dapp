@@ -1,33 +1,28 @@
 import React from "react";
 import { newContextComponents } from "@drizzle/react-components";
-import Header from "../components/Header";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import {Container, Row, Col} from "react-bootstrap";
 import ParticipantsCard from "../components/ParticipantsCard";
 
 const { AccountData, ContractData, ContractForm } = newContextComponents;
 
-function Participants(props) {
+function Participants({ drizzleContext }) {
+  const { drizzle, drizzleState } = drizzleContext;
   return (
     <Container>
       <Row>
-        <Col>
-          <h2>Participants</h2>
-        </Col>
+        <Col className="mb-5"></Col>
       </Row>
-        <ContractData
-          drizzle={props.drizzle}
-          drizzleState={props.drizzleState}
-          contract="EvidenceChain"
-          method="getParticipants"
-          render={(participantsData) => {
-            if (participantsData != null && participantsData != undefined) {
-              console.log(participantsData);
-                return (<ParticipantsCard ParticipantsData = {participantsData}/>)
-            }
-          }}
-        />
+      <ContractData
+        drizzle={drizzle}
+        drizzleState={drizzleState}
+        contract= {drizzle.contracts.EvidenceChain.contractName}
+        method= "getParticipants"
+        render={(participantsData, loading) => {
+          if (!loading && participantsData) {
+            return <ParticipantsCard ParticipantsData={participantsData} />;
+          }
+        }}
+      />
     </Container>
   );
 }
