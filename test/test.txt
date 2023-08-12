@@ -7,6 +7,10 @@ E-4: 0x83C609034D4d695eC5e6219D5d9160C33D355065
 F-5: 0x7fcD302aCe4B41EEF2b89008E61abF34352Bf2BF
 G-6: 0x1f308ec3B28CfC1C6f9eE704bD230Ef7d881a320
 
+EvidenceChain.deployed().then(function(instance) {return instance.addEntity("0xFE2B5b2470d64C211DDDCB3eF2b613b190F8C3c2","TEST","passA","Filho do Marroquino","LAPD","Police") });
+EvidenceChain.deployed().then(function(instance) {return instance.getEntity("0xFE2B5b2470d64C211DDDCB3eF2b613b190F8C3c2") });
+EvidenceChain.deployed().then(function(instance) {return instance.getEntityHistory("0xFE2B5b2470d64C211DDDCB3eF2b613b190F8C3c2") });
+
 let hw = await HelloWorld.new()
 let ec = await EvidenceChain.new()
 evidenceChain.deployed().then(function(instance) {return instance });
