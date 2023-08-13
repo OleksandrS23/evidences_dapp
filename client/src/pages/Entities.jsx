@@ -1,7 +1,7 @@
 import React from "react";
 import { newContextComponents } from "@drizzle/react-components";
 import {Container, Row, Col} from "react-bootstrap";
-import ParticipantsCard from "../components/ParticipantsCard";
+import EntitiesCard from "../components/EntitiesCard";
 
 const { AccountData, ContractData, ContractForm } = newContextComponents;
 
@@ -16,10 +16,11 @@ function Participants({ drizzleContext }) {
         drizzle={drizzle}
         drizzleState={drizzleState}
         contract= {drizzle.contracts.EvidenceChain.contractName}
-        method= "getParticipants"
-        render={(participantsData, loading) => {
-          if (!loading && participantsData) {
-            return <ParticipantsCard ParticipantsData={participantsData} />;
+        method= "getEntities"
+        render={(entitiesData, loading) => {
+          if (!loading && entitiesData) {
+            console.log(entitiesData)
+            return <EntitiesCard EntitiesData={entitiesData} drizzleContext={drizzleContext} />;
           }
         }}
       />

@@ -9,14 +9,14 @@ contract EntitiesManager {
         string departmentCode;
         string entityType;
         address entityAddress;
-        uint256 timestamp;
+        uint32 timestamp;
     }
 
     mapping(address => Entity[]) public entitiesHistory;
     address[] public allEntities;
 
     function addEntity(address _entity, string memory _userName, string memory _password, string memory _name, string  memory _departmentCode, string memory _entityType) public {
-        entitiesHistory[_entity].push(Entity(_userName, _password, _name, _departmentCode, _entityType, _entity, block.timestamp));
+        entitiesHistory[_entity].push(Entity(_userName, _password, _name, _departmentCode, _entityType, _entity,  uint32(block.timestamp)));
         if (entitiesHistory[_entity].length == 1) 
         {
             allEntities.push(_entity);

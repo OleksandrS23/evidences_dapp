@@ -3,6 +3,7 @@ import { newContextComponents } from "@drizzle/react-components";
 import {Row, Col, Button, Container} from "react-bootstrap";
 import AddEvidence from '../components/AddEvidence';
 import EvidencesCard from '../components/EvidencesCard';
+import EvidencesTable from '../components/EvidencesTable';
 
 const { AccountData, ContractData, ContractForm } = newContextComponents;
 
@@ -31,7 +32,8 @@ function Evidences({ drizzleContext }) {
         render={(evidencesData, loading) => {
           if (!loading && evidencesData) {
             console.log(evidencesData);
-            return <EvidencesCard EvidencesData={evidencesData} />;
+            // return <EvidencesCard EvidencesData={evidencesData} />;
+            return <EvidencesTable EvidencesData={evidencesData} />;
           }
         }}
       />

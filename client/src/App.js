@@ -5,7 +5,7 @@ import { Drizzle } from "@drizzle/store";
 import drizzleOptions from "./configs/drizzleOptions";
 import Header from "./components/Header";
 import Home  from "./pages/Home"
-import Participants from "./pages/Participants";
+import Entities from "./pages/Entities";
 import Evidences from "./pages/Evidences";
 import MyNavBar from "./components/Navbar";
 import Loader from "./components/Loader";
@@ -66,7 +66,7 @@ function App() {
               <MyNavBar drizzleContext={drizzleContext} />
               <Routes>
                 <Route exact path="/" element={<Home drizzleContext={drizzleContext} />} />
-                <Route path="/participants" element={<Participants drizzleContext={drizzleContext} />} />
+                <Route path="/entities" element={<Entities drizzleContext={drizzleContext} />} />
                 <Route path="/evidences" element={<Evidences drizzleContext={drizzleContext} />} />
               </Routes>
             </Router>
