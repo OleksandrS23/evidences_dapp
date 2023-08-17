@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { newContextComponents } from "@drizzle/react-components";
 import {Row, Col, Button, Container} from "react-bootstrap";
-import AddEvidence from '../components/AddEvidence';
+import AddEvidence from '../components/Evidences/AddEvidence';
 import EvidencesCard from '../components/EvidencesCard';
-import EvidencesTable from '../components/EvidencesTable';
+import EvidencesTable from '../components/Evidences/EvidencesTable';
 
 const { AccountData, ContractData, ContractForm } = newContextComponents;
 
@@ -33,7 +33,7 @@ function Evidences({ drizzleContext }) {
           if (!loading && evidencesData) {
             console.log(evidencesData);
             // return <EvidencesCard EvidencesData={evidencesData} />;
-            return <EvidencesTable EvidencesData={evidencesData} />;
+            return <EvidencesTable EvidencesData = {evidencesData} drizzleContext = {drizzleContext} />;
           }
         }}
       />

@@ -143,6 +143,19 @@ contract EvidenceChain {
     function getEvidence(string memory _evidenceUniqueCode) public view returns (EvidencesManager.Evidence memory) {
         return evidencesManager.getLastUpdate(_evidenceUniqueCode);
     }
+    
+    function evidenceNewOwner(string memory _evidenceUniqueCode, address _newOwner) onlyOwner(_evidenceUniqueCode) public {
+        EvidencesManager.Evidence memory _evidence =  evidencesManager.getLastUpdate(_evidenceUniqueCode);
+        EntitiesManager.Entity memory _entity =  entitiesManager.getLastUpdate(_newOwner);
+        evidencesManager.updateOwner(_evidence.evidenceUniqueCode, _evidence.evidenceName, _evidence.evidenceType, _entity);
+    } 
+
+     modifier onlyOwner(string memory _evidenceUniqueCode) {
+          EvidencesManager.Evidence memory _evidence =  evidencesManager.getLastUpdate(_evidenceUniqueCode);
+          require(msg.sender == _evidence.evidenceOwner.entityAddress,"Not Owner");
+          _;
+     }
+
 
     // function addEvidence(string memory _evidenceUniqueCode,
     //                     string memory _evidenceName,
@@ -172,13 +185,6 @@ contract EvidenceChain {
     //     }
     // }
     // return true;
-    // }
-
-
-    // modifier onlyOwner(uint32 _evidenceId) {
-    //      require(msg.sender == evidences[_evidenceId].evidenceOwner,"");
-    //      _;
-
     // }
 
     // function getEvidences() public view returns (Evidence[] memory){

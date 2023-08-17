@@ -15,11 +15,22 @@ contract EvidencesManager {
     string[] public allEvidences;
 
     function addEvidence(string memory _evidenceUniqueCode, string memory _evidenceName, string memory _evidenceType, EntitiesManager.Entity memory _entity) public {
-        evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, _evidenceName, _evidenceType, _entity, block.timestamp));
-        if (evidencesHistory[_evidenceUniqueCode].length == 1) 
+        if (evidencesHistory[_evidenceUniqueCode].length == 0) 
         {
+            evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, _evidenceName, _evidenceType, _entity, block.timestamp));
             allEvidences.push(_evidenceUniqueCode);
         }
+        else{
+            uint totalVersions = evidencesHistory[_evidenceUniqueCode].length;
+            Evidence memory lastEvidence = evidencesHistory[_evidenceUniqueCode][totalVersions - 1];
+            require(lastEvidence.evidenceOwner.entityAddress == _entity.entityAddress, "Not Owner");
+            evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, _evidenceName, _evidenceType, _entity, block.timestamp));
+        }
+    }
+
+    function updateOwner(string memory _evidenceUniqueCode, string memory _evidenceName, string memory _evidenceType, EntitiesManager.Entity memory _entity)public 
+    {
+        evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, _evidenceName, _evidenceType, _entity, block.timestamp));
     }
 
     function getEvidences() public view returns (string[] memory) {
