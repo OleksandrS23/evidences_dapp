@@ -41,7 +41,7 @@ function AddEvidence({ show, onClose , drizzleContext}) {
   };
 
   return (
-    <Modal show={show} onHide={onClose}>
+    <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>Add Evidence</Modal.Title>
       </Modal.Header>

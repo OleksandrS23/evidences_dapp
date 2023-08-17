@@ -5,7 +5,7 @@ import EntitiesCard from "../components/EntitiesCard";
 
 const { AccountData, ContractData, ContractForm } = newContextComponents;
 
-function Participants({ drizzleContext }) {
+function Entities({ drizzleContext }) {
   const { drizzle, drizzleState } = drizzleContext;
   return (
     <Container>
@@ -28,4 +28,4 @@ function Participants({ drizzleContext }) {
   );
 }
 
-export default Participants;
+export default Entities;

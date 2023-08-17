@@ -40,7 +40,7 @@ function EditEvidence({ show, onClose , drizzleContext, data}) {
     if (!data){}
     else{
         return (
-    <Modal show={show} onHide={onClose}>
+    <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>Edit Evidence: {formData.evidenceUniqueCode}</Modal.Title>
       </Modal.Header>

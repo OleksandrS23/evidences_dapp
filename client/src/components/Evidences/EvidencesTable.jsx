@@ -14,6 +14,7 @@ import {History, Edit, Send} from '@mui/icons-material';
 import { createTheme, ThemeProvider  } from '@mui/material/styles';
 import EditEvidence from "./EditEvidence";
 import SendEvidence from "./SendEvidence";
+import HistoryEvidence from "./HistoryEvidence";
 
 let theme = createTheme({
   // Theme customization goes here as usual, including tonalOffset and/or
@@ -35,7 +36,7 @@ theme = createTheme(theme, {
 const columns = [
   { id: "evidenceUniqueCode", label: "ID", minWidth: 100 },
   { id: "evidenceName", label: "Name", minWidth: 100 },
-  { id: "evidenceType", label: "Age", minWidth: 100 },
+  { id: "evidenceType", label: "Type", minWidth: 100 },
   { id: "evidenceOwner", detail: "name" ,label: "Owner", minWidth: 100 },
   { label: "Actions", minWidth: 100}
 ];
@@ -89,6 +90,7 @@ function EvidencesTable(props) {
     <ThemeProvider theme={theme}>
       <EditEvidence show={showEditPopup} onClose={closeEditPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
       <SendEvidence show={showSendPopup} onClose={closeSendPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
+      <HistoryEvidence show={showHistoryPopup} onClose={closeHistoryPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 540 }}>
         <Table stickyHeader aria-label="sticky table">
@@ -118,7 +120,7 @@ function EvidencesTable(props) {
                       }
 
                       if (column.label === "Actions"){
-                        console.log(row)
+                        // console.log(row)
                         if (props.drizzleContext.drizzleState.accounts[0] === row.evidenceOwner.entityAddress)
                         {
                           value = <div>

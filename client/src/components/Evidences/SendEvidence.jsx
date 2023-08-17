@@ -39,7 +39,7 @@ function SendEvidence({ show, onClose , drizzleContext, data}) {
     if (!data){}
     else{
         return (
-    <Modal show={show} onHide={onClose}>
+    <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>Send Evidence: {formData.evidenceUniqueCode}</Modal.Title>
       </Modal.Header>
@@ -47,7 +47,7 @@ function SendEvidence({ show, onClose , drizzleContext, data}) {
 
       <Form onSubmit={handleSubmit}>
           <Form.Group className="mt-1" controlId="evidence.newOwnerAddress">
-            <Form.Label>Type</Form.Label>
+            <Form.Label>New Owner</Form.Label>
             <Form.Control
               type="text"
               name= "newOwnerAddress"
