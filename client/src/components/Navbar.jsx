@@ -4,7 +4,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
 import Header from './Header';
 
-function MyNavBar({ drizzleContext }) {
+function MyNavBar(props) {
+  const { drizzleContext } = props;
   const { drizzle, drizzleState } = drizzleContext;
   
   return (

@@ -5,7 +5,8 @@ import { drizzleReactHooks } from '@drizzle/react-plugin'
 
 const { AccountData, ContractData, ContractForm } = newContextComponents;
 
-function SendEvidence({ show, onClose , drizzleContext, data}) {
+function SendEvidence(props) {
+  const { show, onClose , drizzleContext, data} = props;
   const { drizzle, drizzleState } = drizzleContext;
 
   const [formData, setFormData] = useState({

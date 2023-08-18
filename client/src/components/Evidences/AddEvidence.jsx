@@ -1,39 +1,37 @@
-import React, { useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
-import { newContextComponents } from "@drizzle/react-components";
-import { drizzleReactHooks } from '@drizzle/react-plugin'
+import React, { useState } from "react";
+import { Modal, Button, Form } from "react-bootstrap";
 
-const { AccountData, ContractData, ContractForm } = newContextComponents;
-
-function AddEvidence({ show, onClose , drizzleContext}) {
+function AddEvidence(props) {
+  const { show, onClose, drizzleContext } = props;
   const { drizzle, drizzleState } = drizzleContext;
 
-  const [formData, setFormData] = useState({ /* Initialize your form fields here */ });
+  const [formData, setFormData] = useState({
+    evidenceUniqueCode: "",
+    evidenceName: "",
+    evidenceType: "",
+  });
+  const [validated, setValidated] = useState(false);
 
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const contractInstance = drizzle.contracts.EvidenceChain;
-    const methodArgs = [formData.evidenceUniqueCode, formData.evidenceName, formData.evidenceType];
-    const stackId = contractInstance.methods.addEvidence.cacheSend(...methodArgs)
-    setFormData({});
-    onClose();
+    const form = event.currentTarget;
+    if (form.checkValidity()) {
+      const contractInstance = drizzle.contracts.EvidenceChain;
+      const methodArgs = [
+        formData.evidenceUniqueCode,
+        formData.evidenceName,
+        formData.evidenceType,
+      ];
+      const stackId = contractInstance.methods.addEvidence.cacheSend(
+        ...methodArgs
+      );
+      setFormData({});
+      setValidated(false);
+      onClose();
+    } else {
+      setValidated(true);
+    }
   };
-
-  
-    //    .send({ from: drizzleState.accounts[0] })
-    //    .then((result) => {
-    //      // Handle successful transaction
-    //      console.log('Transaction successful', result);
-        
-    //      
-    //    })
-    //    .catch((error) => {
-    //      // Handle transaction error
-    //      console.error('Transaction error', error);
-    //    });
-    
-    //
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -46,13 +44,13 @@ function AddEvidence({ show, onClose , drizzleContext}) {
         <Modal.Title>Add Evidence</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-
-      <Form onSubmit={handleSubmit}>
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <Form.Group className="mt-1" controlId="evidence.evidenceUniqueCode">
-            <Form.Label>Unique Code</Form.Label>
+            <Form.Label>ID</Form.Label>
             <Form.Control
+              required
               type="text"
-              name= "evidenceUniqueCode"
+              name="evidenceUniqueCode"
               placeholder="EvidenceId1"
               value={formData.evidenceUniqueCode}
               onChange={handleChange}
@@ -61,59 +59,37 @@ function AddEvidence({ show, onClose , drizzleContext}) {
           <Form.Group className="mt-1" controlId="evidence.evidenceName">
             <Form.Label>Name</Form.Label>
             <Form.Control
+              required
               type="text"
-              name= "evidenceName"
+              name="evidenceName"
               placeholder="Evidence Name"
               value={formData.evidenceName}
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group className="mt-1" controlId="evidence.evidenceType">
+          <Form.Group className="mt-1 mb-3" controlId="evidence.evidenceType">
             <Form.Label>Type</Form.Label>
             <Form.Control
+              required
               type="text"
-              name= "evidenceType"
+              name="evidenceType"
               placeholder="File"
               value={formData.evidenceType}
               onChange={handleChange}
             />
           </Form.Group>
+          <div className="d-flex justify-content-end">
+          <Button style={{ marginRight: '10px' }} variant="secondary" onClick={onClose}>
+            Close
+          </Button>
+          <Button  variant="primary" type="submit">
+            Submit
+          </Button>
+          </div>
         </Form>
-
-      {/* <ContractForm
-              drizzle={drizzle}
-              drizzleState={drizzleState}
-              contract={drizzle.contracts.EvidenceChain.contractName}
-              method="addEvidence"
-            //   sendArgs={{ from: drizzleState.accounts[0] }}
-            />  */}
-        
-        
-
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
-          Close
-        </Button>
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
-          Submit
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 }
 
 export default AddEvidence;
-
-/*<Form onSubmit={handleSubmit}>
-          <Form.Group controlId="exampleForm.ControlInput1">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="name@example.com"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            />
-          </Form.Group>
-        </Form>
-        */

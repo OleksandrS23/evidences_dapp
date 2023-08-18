@@ -3,9 +3,10 @@ import { newContextComponents } from "@drizzle/react-components";
 import {Container, Row, Col} from "react-bootstrap";
 import EntitiesCard from "../components/EntitiesCard";
 
-const { AccountData, ContractData, ContractForm } = newContextComponents;
+const { ContractData } = newContextComponents;
 
-function Entities({ drizzleContext }) {
+function Entities(props) {
+  const { drizzleContext } = props;
   const { drizzle, drizzleState } = drizzleContext;
   return (
     <Container>

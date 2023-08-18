@@ -27,7 +27,7 @@ useEffect(() => {
         date: formattedDateTime,
         evidenceOwner: evidence.evidenceOwner.name,
         evidenceOwnerType: evidence.evidenceOwner.entityType,
-        evidenceType: evidence.entityType
+        evidenceType: evidence.evidenceType
       });
     }
   }, [evidenceData]);
@@ -48,7 +48,7 @@ return (
               <Card.Header>{evidence.evidenceName}</Card.Header>
                 <ListGroup variant="flush">
                   <ListGroup.Item>Unique Code: {evidenceData.evidenceUniqueCode}</ListGroup.Item>
-                  <ListGroup.Item> <div> Owner: {evidenceData.evidenceOwner}</div> <div>Type: {evidenceData.evidenceOwnerType}</div></ListGroup.Item>
+                  <ListGroup.Item> {evidenceData.evidenceOwner} <br/> Type: {evidenceData.evidenceOwnerType}</ListGroup.Item>
                   <ListGroup.Item>Evidence Type: {evidenceData.evidenceType}</ListGroup.Item>
                 </ListGroup>
     </Card>

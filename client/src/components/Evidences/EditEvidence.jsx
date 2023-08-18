@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { newContextComponents } from "@drizzle/react-components";
-import { drizzleReactHooks } from '@drizzle/react-plugin'
 
-const { AccountData, ContractData, ContractForm } = newContextComponents;
-
-function EditEvidence({ show, onClose , drizzleContext, data}) {
+function EditEvidence(props) {
+  const { show, onClose , drizzleContext, data} = props
   const { drizzle, drizzleState } = drizzleContext;
 
   const [formData, setFormData] = useState({

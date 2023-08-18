@@ -92,10 +92,10 @@ function EvidencesTable(props) {
       <SendEvidence show={showSendPopup} onClose={closeSendPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
       <HistoryEvidence show={showHistoryPopup} onClose={closeHistoryPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 540 }}>
+      <TableContainer >
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
-            <TableRow>
+            <TableRow key = "0">
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
@@ -120,7 +120,6 @@ function EvidencesTable(props) {
                       }
 
                       if (column.label === "Actions"){
-                        // console.log(row)
                         if (props.drizzleContext.drizzleState.accounts[0] === row.evidenceOwner.entityAddress)
                         {
                           value = <div>

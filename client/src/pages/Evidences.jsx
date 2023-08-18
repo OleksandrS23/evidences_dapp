@@ -4,12 +4,11 @@ import {Row, Col, Button, Container} from "react-bootstrap";
 import AddEvidence from '../components/Evidences/AddEvidence';
 import EvidencesTable from '../components/Evidences/EvidencesTable';
 
-const { AccountData, ContractData, ContractForm } = newContextComponents;
+const {ContractData } = newContextComponents;
 
-function Evidences({ drizzleContext }) {
+function Evidences(props) {
+  const { drizzleContext } = props;
   const { drizzle, drizzleState } = drizzleContext;
-
-  const accountAddress = drizzleState.accounts[0];
 
   const [showPopup, setShowPopup] = useState(false);
 
