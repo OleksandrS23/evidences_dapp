@@ -7,6 +7,8 @@ function AddEvidence(props) {
 
   const [formData, setFormData] = useState({
     evidenceUniqueCode: "",
+    evidenceCaseNo: "",
+    evidenceClassification: "",
     evidenceName: "",
     evidenceType: "",
   });
@@ -19,6 +21,8 @@ function AddEvidence(props) {
       const contractInstance = drizzle.contracts.EvidenceChain;
       const methodArgs = [
         formData.evidenceUniqueCode,
+        formData.evidenceCaseNo,
+        formData.evidenceClassification,
         formData.evidenceName,
         formData.evidenceType,
       ];
@@ -53,6 +57,28 @@ function AddEvidence(props) {
               name="evidenceUniqueCode"
               placeholder="EvidenceId1"
               value={formData.evidenceUniqueCode}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group className="mt-1" controlId="evidence.evidenceCaseNo">
+            <Form.Label>Case No</Form.Label>
+            <Form.Control
+              required
+              type="text"
+              name="evidenceCaseNo"
+              placeholder="123456"
+              value={formData.evidenceCaseNo}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group className="mt-1" controlId="evidence.evidenceClassification">
+            <Form.Label>Classification</Form.Label>
+            <Form.Control
+              required
+              type="text"
+              name="evidenceClassification"
+              placeholder="Normal"
+              value={formData.evidenceClassification}
               onChange={handleChange}
             />
           </Form.Group>

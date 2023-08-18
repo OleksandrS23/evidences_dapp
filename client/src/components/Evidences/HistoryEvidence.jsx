@@ -14,18 +14,18 @@ function HistoryEvidence(props) {
   const { drizzle, drizzleState } = drizzleContext;
 
   const [formData, setFormData] = useState({
-    evidenceUniqueCode: data?.evidenceUniqueCode,
+    evidenceUniqueCode: data?.uniqueCode,
   });
 
   useEffect(() => {
     if (data) {
       setFormData({
-        evidenceUniqueCode: data.evidenceUniqueCode,
+        evidenceUniqueCode: data.uniqueCode,
       });
     }
   }, [data]);
 
-  if (!data && !formData.evidenceUniqueCode) {
+  if (!data && !formData.uniqueCode) {
 
   } else {
     return (
@@ -50,6 +50,7 @@ function HistoryEvidence(props) {
         methodArgs = {[formData.evidenceUniqueCode]}
         render={(evidencesData, loading) => {
           if (!loading && evidencesData) {
+            console.log(evidencesData)
             return evidencesData.map((evidence, index)=>{
                 var last = index == evidencesData.length - 1? true: false
                 return <TimeLineEvidence evidence={evidence} connector={!last} />;

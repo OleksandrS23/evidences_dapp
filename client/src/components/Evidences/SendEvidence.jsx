@@ -10,14 +10,14 @@ function SendEvidence(props) {
   const { drizzle, drizzleState } = drizzleContext;
 
   const [formData, setFormData] = useState({
-        evidenceUniqueCode: data?.evidenceUniqueCode,
+        evidenceUniqueCode: data?.uniqueCode,
         newOwnerAddress: ''
     });
 
    useEffect(() => {
             if (data) {
               setFormData({
-                evidenceUniqueCode: data.evidenceUniqueCode,
+                evidenceUniqueCode: data.uniqueCode,
                 newOwnerAddress:''
               });
             }

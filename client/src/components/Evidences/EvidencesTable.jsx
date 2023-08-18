@@ -10,7 +10,7 @@ import {
   Button,
   Paper
 } from "@mui/material";
-import {History, Edit, Send} from '@mui/icons-material';
+import {History, Edit, Send, FileUpload} from '@mui/icons-material';
 import { createTheme, ThemeProvider  } from '@mui/material/styles';
 import EditEvidence from "./EditEvidence";
 import SendEvidence from "./SendEvidence";
@@ -34,10 +34,12 @@ theme = createTheme(theme, {
 });
 
 const columns = [
-  { id: "evidenceUniqueCode", label: "ID", minWidth: 100 },
-  { id: "evidenceName", label: "Name", minWidth: 100 },
-  { id: "evidenceType", label: "Type", minWidth: 100 },
-  { id: "evidenceOwner", detail: "name" ,label: "Owner", minWidth: 100 },
+  { id: "uniqueCode", label: "ID", minWidth: 100 },
+  { id: "caseNo", label: "Case No", minWidth: 100 },
+  { id: "classification", label: "Classification", minWidth: 100 },
+  { id: "name", label: "Name", minWidth: 100 },
+  { id: "eType", label: "Type", minWidth: 100 },
+  { id: "owner", detail: "name" ,label: "Owner", minWidth: 100 },
   { label: "Actions", minWidth: 100}
 ];
 
@@ -46,6 +48,7 @@ function EvidencesTable(props) {
   const [showEditPopup, setShowEditPopup] = React.useState(false);
   const [showHistoryPopup, setShowHistoryPopup] = React.useState(false);
   const [showSendPopup, setShowSendPopup] = React.useState(false);
+  const [showUploadPopup, setShowUploadPopup] = React.useState(false);
   const [actualData, setActualData] = React.useState({});
 
   const [page, setPage] = React.useState(0);
@@ -79,6 +82,15 @@ function EvidencesTable(props) {
   };
   const closeSendPopup = () => {
     setShowSendPopup(false)
+    setActualData('')
+  };
+
+  const openUploadPopup = (data) => {
+    setActualData(data)
+    setShowUploadPopup(true)
+  };
+  const closeUploadPopup = () => {
+    setShowUploadPopup(false)
     setActualData('')
   };
   
@@ -120,9 +132,10 @@ function EvidencesTable(props) {
                       }
 
                       if (column.label === "Actions"){
-                        if (props.drizzleContext.drizzleState.accounts[0] === row.evidenceOwner.entityAddress)
+                        if (props.drizzleContext.drizzleState.accounts[0] === row.owner.entityAddress)
                         {
                           value = <div>
+                          <Button onClick = {() => openUploadPopup(row)} ><FileUpload/></Button>
                           <Button onClick = {() => openEditPopup(row)} color = "salmon"><Edit/></Button> 
                           <Button onClick = {() => openHistoryPopup(row)}><History/></Button>
                           <Button onClick = {() => openSendPopup(row)} color = "success" ><Send/></Button>

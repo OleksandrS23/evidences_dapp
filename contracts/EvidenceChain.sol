@@ -119,10 +119,16 @@ contract EvidenceChain {
     // return -1;
     // }
 
-    function addEvidence(string memory _evidenceUniqueCode, string memory _evidenceName, string memory _evidenceType) public {
+    function addEvidence(string memory _evidenceUniqueCode, string memory _caseNo, string memory _classification, string memory _evidenceName, string memory _evidenceType) public {
         EntitiesManager.Entity memory _entity = entitiesManager.getLastUpdate(msg.sender);
         require(keccak256(abi.encodePacked(_entity.entityType)) == keccak256("Police"),"Not Police.");
-        evidencesManager.addEvidence(_evidenceUniqueCode, _evidenceName, _evidenceType, _entity);
+        evidencesManager.addEvidence(_evidenceUniqueCode, _caseNo, _classification, _evidenceName, _evidenceType, _entity);
+    }
+
+    function addEvidence(string memory _evidenceUniqueCode, string memory _caseNo, string memory _classification, string memory _evidenceName, string memory _evidenceType, string[] memory _files) public {
+        EntitiesManager.Entity memory _entity = entitiesManager.getLastUpdate(msg.sender);
+        require(keccak256(abi.encodePacked(_entity.entityType)) == keccak256("Police"),"Not Police.");
+        evidencesManager.addEvidence(_evidenceUniqueCode, _caseNo, _classification, _evidenceName, _evidenceType, _entity, _files);
     }
 
     function getEvidences() public view returns (EvidencesManager.Evidence[] memory) {
@@ -145,14 +151,18 @@ contract EvidenceChain {
     }
     
     function evidenceNewOwner(string memory _evidenceUniqueCode, address _newOwner) onlyOwner(_evidenceUniqueCode) public {
-        EvidencesManager.Evidence memory _evidence =  evidencesManager.getLastUpdate(_evidenceUniqueCode);
         EntitiesManager.Entity memory _entity =  entitiesManager.getLastUpdate(_newOwner);
-        evidencesManager.updateOwner(_evidence.evidenceUniqueCode, _evidence.evidenceName, _evidence.evidenceType, _entity);
+        evidencesManager.updateOwner(_evidenceUniqueCode, _entity);
     } 
+    
+
+    function addFiles(string memory _evidenceUniqueCode, string[] memory _files) onlyOwner(_evidenceUniqueCode) public {
+        evidencesManager.addFiles(_evidenceUniqueCode, _files); 
+    }
 
      modifier onlyOwner(string memory _evidenceUniqueCode) {
           EvidencesManager.Evidence memory _evidence =  evidencesManager.getLastUpdate(_evidenceUniqueCode);
-          require(msg.sender == _evidence.evidenceOwner.entityAddress,"Not Owner");
+          require(msg.sender == _evidence.owner.entityAddress,"Not Owner");
           _;
      }
 
