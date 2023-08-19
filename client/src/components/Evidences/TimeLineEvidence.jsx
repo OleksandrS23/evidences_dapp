@@ -31,12 +31,16 @@ function TimeLineEvidence(props) {
       const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
       setEvidenceData({
         evidenceUniqueCode: evidence.uniqueCode,
+        evidenceCaseNo: evidence.caseNo,
+        evidenceClassification: evidence.classification,
         date: formattedDateTime,
         evidenceOwner: evidence.owner.name,
         evidenceOwnerType: evidence.owner.entityType,
         evidenceType: evidence.eType,
+        evidenceFiles: evidence.uFiles
       });
     }
+    console.log(evidenceData.evidenceFiles)
   }, [evidence.timestamp]);
 
   return (
@@ -49,11 +53,14 @@ function TimeLineEvidence(props) {
         {connector && <TimelineConnector />}
       </TimelineSeparator>
       <TimelineContent>
-        <Card style={{ width: "18rem" }}>
+        <Card style={{ width: "40rem" }}>
           <Card.Header>{evidence.name}</Card.Header>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              Unique Code: {evidenceData.evidenceUniqueCode}
+              Case No: {evidenceData.evidenceCaseNo}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              Classification: {evidenceData.evidenceClassification}
             </ListGroup.Item>
             <ListGroup.Item>
               {" "}
@@ -61,8 +68,11 @@ function TimeLineEvidence(props) {
               {evidenceData.evidenceOwnerType}
             </ListGroup.Item>
             <ListGroup.Item>
-              Evidence Type: {evidenceData.evidenceType}
+              Type: {evidenceData.evidenceType}
             </ListGroup.Item>
+            {evidenceData.evidenceFiles?.length > 0 && (<ListGroup.Item>
+              Files: {evidenceData.evidenceFiles.map(ev=> {return <p>{ev}</p>})}
+            </ListGroup.Item>)}
           </ListGroup>
         </Card>
       </TimelineContent>

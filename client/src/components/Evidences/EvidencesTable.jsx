@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider  } from '@mui/material/styles';
 import EditEvidence from "./EditEvidence";
 import SendEvidence from "./SendEvidence";
 import HistoryEvidence from "./HistoryEvidence";
+import UploadFilesEvidence from "./UploadFilesEvidence";
 
 let theme = createTheme({
   // Theme customization goes here as usual, including tonalOffset and/or
@@ -103,6 +104,7 @@ function EvidencesTable(props) {
       <EditEvidence show={showEditPopup} onClose={closeEditPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
       <SendEvidence show={showSendPopup} onClose={closeSendPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
       <HistoryEvidence show={showHistoryPopup} onClose={closeHistoryPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
+      <UploadFilesEvidence show={showUploadPopup} onClose={closeUploadPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer >
         <Table stickyHeader aria-label="sticky table">

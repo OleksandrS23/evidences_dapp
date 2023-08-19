@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { newContextComponents } from "@drizzle/react-components";
-import { drizzleReactHooks } from '@drizzle/react-plugin'
-
-const { AccountData, ContractData, ContractForm } = newContextComponents;
 
 function SendEvidence(props) {
   const { show, onClose , drizzleContext, data} = props;
