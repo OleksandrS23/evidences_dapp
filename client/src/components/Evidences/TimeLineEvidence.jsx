@@ -63,7 +63,6 @@ function TimeLineEvidence(props) {
               Classification: {evidenceData.evidenceClassification}
             </ListGroup.Item>
             <ListGroup.Item>
-              {" "}
               {evidenceData.evidenceOwner} <br /> Type:{" "}
               {evidenceData.evidenceOwnerType}
             </ListGroup.Item>
