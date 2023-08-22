@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common';
 import { UploadModule } from './upload/upload.module';
 import { MongooseModule} from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
+import { EthereumService } from './ethereum/ethereum.service';
 import 'dotenv/config';
 
 @Module({
@@ -12,6 +13,7 @@ import 'dotenv/config';
     AuthModule,
   ],
   exports: [MongooseModule],
+  providers: [EthereumService],
   //controllers: [AppController],
   //providers: [AppService],
 })

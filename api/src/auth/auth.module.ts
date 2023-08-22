@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuardJWT } from './auth-guard/auth-guard.strategy';
 import 'dotenv/config';
+import { EthereumService } from 'src/ethereum/ethereum.service';
 
 @Module({
   imports:[PassportModule.register({ defaultStrategy: 'eth-jwt' }),
@@ -13,6 +14,6 @@ import 'dotenv/config';
     signOptions: { expiresIn: '4h' },
   }),],
   controllers: [AuthController],
-  providers: [AuthService, AuthGuardJWT]
+  providers: [AuthService, AuthGuardJWT, EthereumService]
 })
-export class AuthModule {}
+export class AuthModule {} 
