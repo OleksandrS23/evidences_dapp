@@ -12,13 +12,15 @@ export class AuthGuardJWT extends PassportStrategy(Strategy, 'eth-jwt') {
       });
     }
   
-    async validate(username: string, password: string) : Promise<any>
+    async validate(body: any) : Promise<any>
     {
-      const user = this.authService.validateUser(username, password)
+      console.log(body)
+      const user = this.authService.verifyUser(body.address, body.user)
       
       if (!user) {
         throw new UnauthorizedException();
       }
+
       return user;
     }
   }

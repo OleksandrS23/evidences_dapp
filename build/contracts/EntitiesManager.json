@@ -14618,12 +14618,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xE6FB5713A8eF375bf205a0cb33cD5086649855B4",
-      "transactionHash": "0xe82e6669a4eb2d2497c2d7244a3b0632bea1f3ea21b8e52bbe346fa4d9522e07"
+      "address": "0x5a392ab19C7b097Ed58131dFdB3dFfeAFe26b517",
+      "transactionHash": "0x2baf054ea98e3399c4949b665c3a4cd3af5e3a7a3572a60ffbaf34922ba59c8f"
     }
   },
   "schemaVersion": "3.4.13",
-  "updatedAt": "2023-08-22T20:36:36.010Z",
+  "updatedAt": "2023-08-27T13:27:32.543Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

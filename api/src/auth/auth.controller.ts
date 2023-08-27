@@ -1,29 +1,34 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { EthereumService } from 'src/ethereum/ethereum.service';
+import { Controller, Post, Body ,BadRequestException, UnauthorizedException, InternalServerErrorException} from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService, private readonly ethereumService: EthereumService) {}
+  constructor(
+    private authService: AuthService
+  ) {}
 
   @Post('login')
   async login(@Body() credentials: any) {
-    // Validate credentials, retrieve user, etc.
-    const user = await this.authService.validateUser(credentials.user, credentials.password);
-    console.log(user)
-    if (user) {
-      const token = await this.authService.generateToken({ sub: user.id });
-      return { token };
+    if (!credentials.password) {
+      throw new BadRequestException('Password is required.');
     }
-  }
 
-  @Post('getEntities')
-  async getEntities(@Body() body: any)
-  {
-    var result = await this.ethereumService.sendContractTransaction(body.from, body.methodName, ...body?.args)
-    if (result != null){
-      return;
+    try {
+      const user = await this.authService.validateUser(
+        credentials.address,
+        credentials.user,
+        credentials.password
+      );
+
+      if (user) {
+          const token = await this.authService.generateToken({ address: credentials.address , user:  credentials.user});
+          return { token };
+      }
+      
+      throw new UnauthorizedException('Invalid credentials.');
+    } catch (error) {
+      throw new InternalServerErrorException('Authentication failed.');
     }
-    return;
   }
 }
+

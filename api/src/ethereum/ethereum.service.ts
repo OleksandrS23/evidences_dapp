@@ -16,25 +16,43 @@ export class EthereumService {
     );
   }
 
-  async callMethod(contract: any, methodName: string, ...args: any[]) {
-    return contract.methods[methodName](...args).call();
-  }
-
   async sendContractTransaction(
     from: string,
     methodName: string,
     ...args: any[]
   ) {
-    //var arg = [...args[0], {from: from}]
     var result = [];
     try {
-      return await this.contract.methods[methodName](
-        ...args
+      result = await this.contract.methods[methodName](
+        // ...args
       ).send({
         from: from, // Specify the sender's Ethereum address
         gas: 2000000, // Set an appropriate gas limit
         // gasPrice: '20000000000' // Set an appropriate gas price
       });
+      console.log(result)
+      return result;
+    } catch (error) {
+      console.error('Transaction failed:', error);
+    }
+  }
+
+  async callContractTransaction(
+    from: string,
+    methodName: string,
+    ...args: any[]
+  ) {
+    var result = [];
+    try {
+      result = await this.contract.methods[methodName](
+        ...args
+      ).call({
+        from: from, // Specify the sender's Ethereum address
+        gas: 2000000, // Set an appropriate gas limit
+        // gasPrice: '20000000000' // Set an appropriate gas price
+      });
+      console.log("callContractTransaction", result)
+      return result;
     } catch (error) {
       console.error('Transaction failed:', error);
     }

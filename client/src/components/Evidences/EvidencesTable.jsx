@@ -16,6 +16,8 @@ import EditEvidence from "./EditEvidence";
 import SendEvidence from "./SendEvidence";
 import HistoryEvidence from "./HistoryEvidence";
 import UploadFilesEvidence from "./UploadFilesEvidence";
+import Login from "../Login";
+import TokenManager from "../../manager/TokenManager";
 
 let theme = createTheme({
   // Theme customization goes here as usual, including tonalOffset and/or
@@ -50,6 +52,7 @@ function EvidencesTable(props) {
   const [showHistoryPopup, setShowHistoryPopup] = React.useState(false);
   const [showSendPopup, setShowSendPopup] = React.useState(false);
   const [showUploadPopup, setShowUploadPopup] = React.useState(false);
+  const [showLoginPopup, setShowLoginPopup] = React.useState(false);
   const [actualData, setActualData] = React.useState({});
 
   const [page, setPage] = React.useState(0);
@@ -88,10 +91,22 @@ function EvidencesTable(props) {
 
   const openUploadPopup = (data) => {
     setActualData(data)
-    setShowUploadPopup(true)
+    if (TokenManager.isValid())
+    {
+      console.log("asd")
+      setShowUploadPopup(true)
+    }
+    else{
+      setShowLoginPopup(true)
+    }
   };
   const closeUploadPopup = () => {
     setShowUploadPopup(false)
+    setActualData('')
+  };
+
+  const closeLoginPopup = () => {
+    setShowLoginPopup(false)
     setActualData('')
   };
   
@@ -105,6 +120,8 @@ function EvidencesTable(props) {
       <SendEvidence show={showSendPopup} onClose={closeSendPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
       <HistoryEvidence show={showHistoryPopup} onClose={closeHistoryPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
       <UploadFilesEvidence show={showUploadPopup} onClose={closeUploadPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
+      <Login show={showLoginPopup} onClose={closeLoginPopup} drizzleContext = {props.drizzleContext}/>
+
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer >
         <Table stickyHeader aria-label="sticky table">
