@@ -16,8 +16,7 @@ import EditEvidence from "./EditEvidence";
 import SendEvidence from "./SendEvidence";
 import HistoryEvidence from "./HistoryEvidence";
 import UploadFilesEvidence from "./UploadFilesEvidence";
-import Login from "../Login";
-import TokenManager from "../../manager/TokenManager";
+import LoginComponent from "../Login";
 
 let theme = createTheme({
   // Theme customization goes here as usual, including tonalOffset and/or
@@ -91,12 +90,12 @@ function EvidencesTable(props) {
 
   const openUploadPopup = (data) => {
     setActualData(data)
-    if (TokenManager.isValid())
+    if (localStorage.getItem("token"))
     {
-      console.log("asd")
       setShowUploadPopup(true)
     }
-    else{
+     else
+    {
       setShowLoginPopup(true)
     }
   };
@@ -109,6 +108,11 @@ function EvidencesTable(props) {
     setShowLoginPopup(false)
     setActualData('')
   };
+
+  const successLogined = () =>{
+    setShowLoginPopup(false)
+    setShowUploadPopup(true)
+  }
   
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
@@ -120,7 +124,7 @@ function EvidencesTable(props) {
       <SendEvidence show={showSendPopup} onClose={closeSendPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
       <HistoryEvidence show={showHistoryPopup} onClose={closeHistoryPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
       <UploadFilesEvidence show={showUploadPopup} onClose={closeUploadPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
-      <Login show={showLoginPopup} onClose={closeLoginPopup} drizzleContext = {props.drizzleContext}/>
+      <LoginComponent show={showLoginPopup} onClose={closeLoginPopup} onSuccess = {successLogined} drizzleContext = {props.drizzleContext}/>
 
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer >

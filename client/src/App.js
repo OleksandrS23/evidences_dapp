@@ -34,6 +34,7 @@ function App() {
     // Defina o manipulador para ouvir o evento "accountsChanged"
     const handleAccountsChanged = async (accounts) => {
       // Recarregue a página
+      localStorage.removeItem("token")
       window.location.reload();
     };
 
