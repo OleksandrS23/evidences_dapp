@@ -15,18 +15,7 @@ contract EvidenceChain {
         evidencesManager = EvidencesManager(_evidencesManagerAddress);
     }
 
-    // uint32 public evidence_id = 0;
     uint32 public owner_id = 0;
-
-    // struct Evidence {
-    //     string evidenceUniqueCode;
-    //     string evidenceName;
-    //     string evidenceType;
-    //     address evidenceOwner;
-    //     uint32 mfgTimeStamp;
-    // }
-
-    // Evidence [] public evidences;
 
     struct ownership {
         uint32 evidenceId;
@@ -77,10 +66,6 @@ contract EvidenceChain {
         return entities;
     }
 
-    // function getEntities() public view returns (address[] memory) {
-    //     return entitiesManager.getEntities();
-    // }
-
     function getEntityHistory()
         public
         view
@@ -128,51 +113,6 @@ contract EvidenceChain {
         return (false);
     }
 
-    // function addParticipant(string memory _name, string memory _pass, address _pAdd, string memory _pType) public {
-    //     uint32 userId = participant_id++;
-
-    //     participants.push(Participant(_name, _pass, _pType, _pAdd));
-
-    //     emit ParticipantAdded(userId);
-    // }
-
-    // function getParticipants() onlyParticipant() public view returns (Participant[] memory){
-    //     return participants;
-    // }
-
-    // function getParticipant() public view returns (Participant memory)
-    // {
-    //     for (uint32 i = 0; i < participants.length; i++) {
-    //         if (participants[i].participantAddress == msg.sender) {
-    //             return participants[i];
-    //         }
-    //     }
-    //     revert("Participant not found");
-    // }
-
-    // modifier onlyParticipant() {
-    //     require(isParticipant(), "The address was not found in the list.");
-    //     _;
-    // }
-
-    // function isParticipant() internal view returns(bool) {
-    // for (uint32 i = 0; i < participant_id; i++) {
-    //     if (participants[i].participantAddress == msg.sender) {
-    //         return true;
-    //     }
-    // }
-    // return false;
-    // }
-
-    // function getParticipantId() internal view returns(int32) {
-    // for (uint32 i = 0; i < participant_id; i++) {
-    //     if (participants[i].participantAddress == msg.sender) {
-    //         return int32(i);
-    //     }
-    // }
-    // return -1;
-    // }
-
     function addEvidence(
         string memory _evidenceUniqueCode,
         string memory _caseNo,
@@ -198,32 +138,32 @@ contract EvidenceChain {
         );
     }
 
-    function addEvidence(
-        string memory _evidenceUniqueCode,
-        string memory _caseNo,
-        string memory _classification,
-        string memory _evidenceName,
-        string memory _evidenceType,
-        string[] memory _files
-    ) public {
-        EntitiesManager.Entity memory _entity = entitiesManager.getLastUpdate(
-            msg.sender
-        );
-        require(
-            keccak256(abi.encodePacked(_entity.entityType)) ==
-                keccak256("Police"),
-            "Not Police."
-        );
-        evidencesManager.addEvidence(
-            _evidenceUniqueCode,
-            _caseNo,
-            _classification,
-            _evidenceName,
-            _evidenceType,
-            _entity,
-            _files
-        );
-    }
+    // function addEvidence(
+    //     string memory _evidenceUniqueCode,
+    //     string memory _caseNo,
+    //     string memory _classification,
+    //     string memory _evidenceName,
+    //     string memory _evidenceType,
+    //     EvidencesManager.EvidenceFile[] memory _files
+    // ) public {
+    //     EntitiesManager.Entity memory _entity = entitiesManager.getLastUpdate(
+    //         msg.sender
+    //     );
+    //     require(
+    //         keccak256(abi.encodePacked(_entity.entityType)) ==
+    //             keccak256("Police"),
+    //         "Not Police."
+    //     );
+    //     evidencesManager.addEvidence(
+    //         _evidenceUniqueCode,
+    //         _caseNo,
+    //         _classification,
+    //         _evidenceName,
+    //         _evidenceType,
+    //         _entity,
+    //         _files
+    //     );
+    // }
 
     function getEvidences()
         public
@@ -265,11 +205,14 @@ contract EvidenceChain {
         evidencesManager.updateOwner(_evidenceUniqueCode, _entity);
     }
 
-    function addFiles(
+    function addFile(
         string memory _evidenceUniqueCode,
-        string[] memory _files
+        string memory _fileId,
+        string memory _fileName,
+        string memory _fileHash
     ) public onlyOwner(_evidenceUniqueCode) {
-        evidencesManager.addFiles(_evidenceUniqueCode, _files);
+        EvidencesManager.EvidenceFile memory file =  EvidencesManager.EvidenceFile(_fileId, _fileName, _fileHash);
+        evidencesManager.addFile(_evidenceUniqueCode, file);
     }
 
     modifier onlyOwner(string memory _evidenceUniqueCode) {
@@ -278,93 +221,7 @@ contract EvidenceChain {
         require(msg.sender == _evidence.owner.entityAddress, "Not Owner");
         _;
     }
-
-    // function addEvidence(string memory _evidenceUniqueCode,
-    //                     string memory _evidenceName,
-    //                     string memory _evidenceType) public
-    // {
-    //     // require(verifyEvidenceUniqueCode(_evidenceUniqueCode));
-    //     // int32 _ownerId = getParticipantId();
-    //     // require(_ownerId >= 0, "Not Found Participant!");
-    //     // require(keccak256(abi.encodePacked(participants[uint32(_ownerId)].participantType)) == keccak256("Police"),"Not Police.");
-
-    //     uint32 evidenceId = evidence_id++;
-
-    //     evidences.push(Evidence(_evidenceUniqueCode, _evidenceName, _evidenceType, msg.sender, uint32(block.timestamp)));
-
-    //     // evidences[evidenceId].evidenceName = _evidenceName;
-    //     // evidences[evidenceId].evidenceType = _evidenceType;
-    //     // evidences[evidenceId].evidenceOwner = participants[_ownerId].participantAddress;
-    //     // evidences[evidenceId].mfgTimeStamp = uint32(block.timestamp);
-
-    //     //emit EvidenceAdded(evidenceId);
-    // }
-
-    // function verifyEvidenceUniqueCode(string memory _evidenceUniqueCode) internal view returns(bool) {
-    // for (uint32 i = 0; i < evidence_id; i++) {
-    //     if (keccak256(bytes(evidences[i].evidenceUniqueCode)) == keccak256(bytes(_evidenceUniqueCode))) {
-    //         return false;
-    //     }
-    // }
-    // return true;
-    // }
-
-    // function getEvidences() public view returns (Evidence[] memory){
-    //     return evidences;
-    // }
-
-    // function getEvidence(uint32 _evidenceId) public view returns (string memory,string memory,address,uint32){
-    //     return (evidences[_evidenceId].evidenceName,
-    //             evidences[_evidenceId].evidenceType,
-    //             evidences[_evidenceId].evidenceOwner,
-    //             evidences[_evidenceId].mfgTimeStamp);
-    // }
-
-    // function newOwner(uint32 _user1Id,uint32 _user2Id, uint32 _evidId) onlyOwner(_evidId) public returns (bool) {
-    //     Participant memory p1 = participants[_user1Id];
-    //     Participant memory p2 = participants[_user2Id];
-    //     uint32 ownership_id = owner_id++;
-
-    //     if(keccak256(abi.encodePacked(p1.participantType)) == keccak256("Police")
-    //         && keccak256(abi.encodePacked(p2.participantType))==keccak256("Lab")){
-    //         ownerships[ownership_id].evidenceId = _evidId;
-    //         ownerships[ownership_id].evidenceOwner = p2.participantAddress;
-    //         ownerships[ownership_id].ownerId = _user2Id;
-    //         ownerships[ownership_id].trxTimeStamp = uint32(block.timestamp);
-    //         evidences[_evidId].evidenceOwner = p2.participantAddress;
-    //         evidenceTrack[_evidId].push(ownership_id);
-    //         emit TransferOwnership(_evidId);
-
-    //         return (true);
-    //     }
-    //     else if(keccak256(abi.encodePacked(p1.participantType)) == keccak256("Lab")
-    //         && keccak256(abi.encodePacked(p2.participantType))==keccak256("Lab")){
-    //         ownerships[ownership_id].evidenceId = _evidId;
-    //         ownerships[ownership_id].evidenceOwner = p2.participantAddress;
-    //         ownerships[ownership_id].ownerId = _user2Id;
-    //         ownerships[ownership_id].trxTimeStamp = uint32(block.timestamp);
-    //         evidences[_evidId].evidenceOwner = p2.participantAddress;
-    //         evidenceTrack[_evidId].push(ownership_id);
-    //         emit TransferOwnership(_evidId);
-
-    //         return (true);
-    //     }
-    //     else if(keccak256(abi.encodePacked(p1.participantType)) == keccak256("Lab")
-    //         && keccak256(abi.encodePacked(p2.participantType))==keccak256("Court")){
-    //         ownerships[ownership_id].evidenceId = _evidId;
-    //         ownerships[ownership_id].evidenceOwner = p2.participantAddress;
-    //         ownerships[ownership_id].ownerId = _user2Id;
-    //         ownerships[ownership_id].trxTimeStamp = uint32(block.timestamp);
-    //         evidences[_evidId].evidenceOwner = p2.participantAddress;
-    //         evidenceTrack[_evidId].push(ownership_id);
-    //         emit TransferOwnership(_evidId);
-
-    //         return (true);
-    //     }
-
-    //     return (false);
-    // }
-
+    
     function getProvenance(
         uint32 _evidenceId
     ) external view returns (uint32[] memory) {
@@ -378,19 +235,4 @@ contract EvidenceChain {
 
         return (r.evidenceId, r.ownerId, r.evidenceOwner, r.trxTimeStamp);
     }
-
-    // function authenticateParticipant(uint32 _uid,
-    //                                 string memory _uname,
-    //                                 string memory _pass,
-    //                                 string memory _utype) public view returns (bool){
-    //     if(keccak256(abi.encodePacked(participants[_uid].participantType)) == keccak256(abi.encodePacked(_utype))) {
-    //         if(keccak256(abi.encodePacked(participants[_uid].userName)) == keccak256(abi.encodePacked(_uname))) {
-    //             if(keccak256(abi.encodePacked(participants[_uid].password)) == keccak256(abi.encodePacked(_pass))) {
-    //                 return (true);
-    //             }
-    //         }
-    //     }
-
-    //     return (false);
-    // }
 }

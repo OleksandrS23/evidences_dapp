@@ -14,7 +14,6 @@ export class AuthGuardJWT extends PassportStrategy(Strategy, 'eth-jwt') {
   
     async validate(body: any) : Promise<any>
     {
-      console.log(body)
       const user = this.authService.verifyUser(body.address, body.user)
       
       if (!user) {

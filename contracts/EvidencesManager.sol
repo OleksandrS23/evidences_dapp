@@ -2,6 +2,12 @@ pragma solidity ^0.8.0;
 import "./EntitiesManager.sol";
 
 contract EvidencesManager {
+    
+    struct EvidenceFile {
+        string id;
+        string fileName;
+        string fileHash;
+    }
 
     struct Evidence {
         string uniqueCode;
@@ -11,10 +17,12 @@ contract EvidencesManager {
         string eType;
         EntitiesManager.Entity owner;
         uint256 timestamp;
-        string [] uFiles;
+        string [] uFilesCodes;
     }
 
     mapping(string => Evidence[]) public evidencesHistory;
+    mapping(string => EvidenceFile[]) public evidencesFiles;
+
     string[] public allEvidences;
 
     function addEvidence(string memory _evidenceUniqueCode, string memory _caseNo, string memory _classification, string memory _evidenceName, string memory _evidenceType, EntitiesManager.Entity memory _entity) public {
@@ -31,23 +39,47 @@ contract EvidencesManager {
         }
     }
 
-    function addEvidence(string memory _evidenceUniqueCode, string memory _caseNo, string memory _classification, string memory _evidenceName, string memory _evidenceType, EntitiesManager.Entity memory _entity, string[] memory _files) public {
-        if (evidencesHistory[_evidenceUniqueCode].length == 0) 
-        {
-            evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, _caseNo, _classification,_evidenceName, _evidenceType, _entity, block.timestamp, _files));
-            allEvidences.push(_evidenceUniqueCode);
+    // function addEvidence(string memory _evidenceUniqueCode, string memory _caseNo, string memory _classification, string memory _evidenceName, string memory _evidenceType, EntitiesManager.Entity memory _entity, EvidenceFile[] memory _files) public {
+        
+    //     string[] memory fileIds = new string[](_files.length);
+        
+    //     for (uint256 i = 0; i < _files.length; i++) {
+    //         evidencesFiles[_evidenceUniqueCode].push(EvidenceFile(_files[i].id, _files[i].fileName, _files[i].fileHash));
+    //         fileIds[i] = _files[i].id;
+    //     }
+        
+    //     if (evidencesHistory[_evidenceUniqueCode].length == 0) 
+    //     {
+    //         evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, _caseNo, _classification,_evidenceName, _evidenceType, _entity, block.timestamp, fileIds));
+    //         allEvidences.push(_evidenceUniqueCode);
+    //     }
+    //     else{
+    //         uint totalVersions = evidencesHistory[_evidenceUniqueCode].length;
+    //         Evidence memory lastEvidence = evidencesHistory[_evidenceUniqueCode][totalVersions - 1];
+    //         require(lastEvidence.owner.entityAddress == _entity.entityAddress, "Not Owner");
+    //         evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, _caseNo, _classification,_evidenceName, _evidenceType, _entity, block.timestamp, fileIds));
+    //     }
+    // }
+
+    function addFiles(string memory _evidenceUniqueCode, EvidenceFile[] memory _files) public {
+        Evidence memory evidence = getLastUpdate(_evidenceUniqueCode);
+        string[] memory fileIds = new string[](_files.length);
+
+        for (uint256 i = 0; i < _files.length; i++) {
+            evidencesFiles[_evidenceUniqueCode].push(EvidenceFile(_files[i].id, _files[i].fileName, _files[i].fileHash));
+            fileIds[i] = _files[i].id;
         }
-        else{
-            uint totalVersions = evidencesHistory[_evidenceUniqueCode].length;
-            Evidence memory lastEvidence = evidencesHistory[_evidenceUniqueCode][totalVersions - 1];
-            require(lastEvidence.owner.entityAddress == _entity.entityAddress, "Not Owner");
-            evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, _caseNo, _classification,_evidenceName, _evidenceType, _entity, block.timestamp, _files));
-        }
+
+        evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, evidence.caseNo, evidence.classification, evidence.name, evidence.eType, evidence.owner, block.timestamp, fileIds));
     }
 
-    function addFiles(string memory _evidenceUniqueCode, string[] memory _files) public {
+    function addFile(string memory _evidenceUniqueCode, EvidenceFile memory _file) public {
         Evidence memory evidence = getLastUpdate(_evidenceUniqueCode);
-        evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, evidence.caseNo, evidence.classification, evidence.name, evidence.eType, evidence.owner, block.timestamp, _files));
+        string[] memory fileIds = new string[](1);
+        fileIds[0] = _file.id;
+        evidencesFiles[_evidenceUniqueCode].push(EvidenceFile(_file.id, _file.fileName, _file.fileHash));
+
+        evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, evidence.caseNo, evidence.classification, evidence.name, evidence.eType, evidence.owner, block.timestamp, fileIds));
     }
 
 
