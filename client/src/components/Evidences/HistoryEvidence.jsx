@@ -53,7 +53,7 @@ function HistoryEvidence(props) {
             console.log(evidencesData)
             return evidencesData.map((evidence, index)=>{
                 var last = index == evidencesData.length - 1? true: false
-                return <TimeLineEvidence evidence={evidence} connector={!last} />;
+                return <TimeLineEvidence evidence={evidence} connector={!last} drizzleContext = {drizzleContext}/>;
             })
           }
         }}

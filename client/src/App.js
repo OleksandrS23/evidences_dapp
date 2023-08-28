@@ -15,6 +15,7 @@ const drizzle = new Drizzle(drizzleOptions);
 
 function App() {
   const [drizzleReadinessState, setDrizzleReadinessState] = useState({ drizzleState: null, loading: true });
+  const [tokenData, setTokenState] = useState();
 
   useEffect(() => {
     const unsubscribe = drizzle.store.subscribe(() => {
@@ -38,6 +39,8 @@ function App() {
       window.location.reload();
     };
 
+    const token = localStorage.getItem("token");
+    setTokenState(token);
     // Verifique se o MetaMask está instalado
     if (window.ethereum) {
       // Adicione o manipulador de eventos
@@ -64,7 +67,7 @@ function App() {
 
           return (
             <Router>
-              <MyNavBar drizzleContext={drizzleContext} />
+              <MyNavBar drizzleContext={drizzleContext} token = {tokenData}/>
               <Routes>
                 <Route exact path="/" element={<Home drizzleContext={drizzleContext} />} />
                 <Route path="/entities" element={<Entities drizzleContext={drizzleContext} />} />

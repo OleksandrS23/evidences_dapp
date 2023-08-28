@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from 'axios';
-import * as CryptoJS from 'crypto-js';
 import consts from '../../manager/consts';
 
 function UploadFilesEvidence(props) {

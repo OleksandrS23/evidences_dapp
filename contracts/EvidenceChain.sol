@@ -221,18 +221,23 @@ contract EvidenceChain {
         require(msg.sender == _evidence.owner.entityAddress, "Not Owner");
         _;
     }
+
+    function getFileInfo(string memory _evidenceUniqueCode, string memory _fileUniqueCode) external view returns (EvidencesManager.EvidenceFile memory)
+    {
+        return evidencesManager.getFileInfo(_evidenceUniqueCode, _fileUniqueCode);
+    }
     
-    function getProvenance(
-        uint32 _evidenceId
-    ) external view returns (uint32[] memory) {
-        return evidenceTrack[_evidenceId];
-    }
+    // function getProvenance(
+    //     uint32 _evidenceId
+    // ) external view returns (uint32[] memory) {
+    //     return evidenceTrack[_evidenceId];
+    // }
 
-    function getOwnership(
-        uint32 _regId
-    ) public view returns (uint32, uint32, address, uint32) {
-        ownership memory r = ownerships[_regId];
+    // function getOwnership(
+    //     uint32 _regId
+    // ) public view returns (uint32, uint32, address, uint32) {
+    //     ownership memory r = ownerships[_regId];
 
-        return (r.evidenceId, r.ownerId, r.evidenceOwner, r.trxTimeStamp);
-    }
+    //     return (r.evidenceId, r.ownerId, r.evidenceOwner, r.trxTimeStamp);
+    // }
 }

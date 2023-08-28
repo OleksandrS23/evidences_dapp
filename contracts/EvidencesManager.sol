@@ -97,6 +97,16 @@ contract EvidencesManager {
         return evidencesHistory[_evidenceUniqueCode];
     }
 
+    function getFileInfo(string memory _evidenceUniqueCode, string memory _fileId) public view returns (EvidenceFile memory){
+        EvidenceFile memory evidenceFile;
+        for (uint256 i = 0; i < evidencesFiles[_evidenceUniqueCode].length; i++) {
+            if (keccak256(abi.encodePacked(evidencesFiles[_evidenceUniqueCode][i].id)) == keccak256(abi.encodePacked(_fileId))) {
+                return evidencesFiles[_evidenceUniqueCode][i];
+            }
+        }
+        return evidenceFile;
+    }
+
     function getLastUpdate (string memory _evidenceUniqueCode) public view returns (Evidence memory) {
         uint totalVersions = evidencesHistory[_evidenceUniqueCode].length;
         require(totalVersions > 0, "Evidence not found");

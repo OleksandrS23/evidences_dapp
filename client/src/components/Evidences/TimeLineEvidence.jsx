@@ -12,9 +12,13 @@ import {
 import TimelineOppositeContent, {
   timelineOppositeContentClasses,
 } from "@mui/lab/TimelineOppositeContent";
+import FileComponent from "./FileComponent";
+
+const { ContractData } = newContextComponents;
 
 function TimeLineEvidence(props) {
-  const { evidence, connector } = props;
+  const { evidence, connector, drizzleContext} = props;
+  const { drizzle, drizzleState } = drizzleContext;
 
   const [evidenceData, setEvidenceData] = useState({});
 
@@ -37,7 +41,7 @@ function TimeLineEvidence(props) {
         evidenceOwner: evidence.owner.name,
         evidenceOwnerType: evidence.owner.entityType,
         evidenceType: evidence.eType,
-        evidenceFiles: evidence.uFiles
+        evidenceFiles: evidence.uFilesCodes
       });
     }
     console.log(evidenceData.evidenceFiles)
@@ -53,7 +57,7 @@ function TimeLineEvidence(props) {
         {connector && <TimelineConnector />}
       </TimelineSeparator>
       <TimelineContent>
-        <Card style={{ width: "40rem" }}>
+        <Card style={{ width: "auto" }}>
           <Card.Header>{evidence.name}</Card.Header>
           <ListGroup variant="flush">
             <ListGroup.Item>
@@ -70,7 +74,27 @@ function TimeLineEvidence(props) {
               Type: {evidenceData.evidenceType}
             </ListGroup.Item>
             {evidenceData.evidenceFiles?.length > 0 && (<ListGroup.Item>
-              Files: {evidenceData.evidenceFiles.map(ev=> {return <p>{ev}</p>})}
+              File: {evidenceData.evidenceFiles.map(ev=> {
+                return (
+                <ContractData
+                  drizzle={drizzle}
+                  drizzleState={drizzleState}
+                  contract= {drizzle.contracts.EvidenceChain.contractName}
+                  method= "getFileInfo"
+                  methodArgs = {[evidenceData.evidenceUniqueCode,ev]}
+                  render={(fileInfo, loading) => {
+                    if (!loading && fileInfo) {
+                      console.log(fileInfo)
+                      return <FileComponent fileInfo = {fileInfo} />
+                    }
+                  }}
+                />
+
+                //<p>{ev}</p>
+                
+                )
+                
+                })}
             </ListGroup.Item>)}
           </ListGroup>
         </Card>
