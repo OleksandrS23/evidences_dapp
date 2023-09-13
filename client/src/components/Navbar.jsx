@@ -23,6 +23,7 @@ function MyNavBar(props) {
   };
   const closeLoginPopup = () => {
     setShowLoginPopup(false)
+    window.location.reload();
   };
 
   return (

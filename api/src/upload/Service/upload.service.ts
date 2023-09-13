@@ -20,11 +20,16 @@ export class UploadService {
     });
   }
 
-  async getFileStream(fileId: string): Promise<NodeJS.ReadableStream> {
-    const downloadStream = this.gridFs.openDownloadStream(new mongoose.Types.ObjectId(fileId));
-    if (!downloadStream) {
-      throw new NotFoundException('File not found');
+  async getFileStream(fileId: string): Promise<NodeJS.ReadableStream> 
+  {
+    const cursor = this.gridFs.find({});
+    for await (const doc of cursor) {
+      if (doc._id == fileId)
+      {
+        const downloadStream = this.gridFs.openDownloadStream(new mongoose.Types.ObjectId(fileId));
+        return downloadStream;
+      }
     }
-    return downloadStream;
+    throw new NotFoundException('File not found');
   }
 }
