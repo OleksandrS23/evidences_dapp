@@ -19,6 +19,7 @@ import * as stream from 'stream';
 import { AuthGuard } from '@nestjs/passport';
 import { EthereumService } from 'src/ethereum/ethereum.service';
 import * as CryptoJS from 'crypto-js';
+const { Readable } = require('stream');
 
 @Controller('files')
 export class UploadController {
@@ -47,7 +48,7 @@ export class UploadController {
       const readableStream = stream.Readable.from(file.buffer);
 
       const buffer = file.buffer;
-      const fileHash = CryptoJS.SHA256(buffer).toString(CryptoJS.enc.Hex);
+      const fileHash = CryptoJS.SHA256(buffer.toString()).toString(CryptoJS.enc.Hex);
 
       console.log(fileHash);
       await this.uploadService
@@ -83,13 +84,21 @@ export class UploadController {
   ) {
     try {
       const fileStream = await this.uploadService.getFileStream(fileId);
-      const fileHash = CryptoJS.SHA256(fileStream).toString(CryptoJS.enc.Hex);
-      console.log(fileHash)
-      if (fileHash == body.fileHash) {
-        return res.status(200).json({ isVerified: true });
-      }
+      
+      let data = '';
+      fileStream.on('data', (chunk) =>{
+        data += chunk;
+      })
 
-      return res.status(200).json({ isVerified: false });
+      fileStream.on('end', (chunk) =>{
+        const fileHash = CryptoJS.SHA256(data).toString(CryptoJS.enc.Hex);
+
+        if (fileHash == body.fileHash) {
+          return res.status(200).json({ isVerified: true });
+        }
+  
+        return res.status(200).json({ isVerified: false });
+      })
     } catch (ex) {
       return res.status(200).json({ isVerified: false });
     }
