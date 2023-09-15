@@ -18,8 +18,7 @@ import { UploadService } from './Service/upload.service';
 import * as stream from 'stream';
 import { AuthGuard } from '@nestjs/passport';
 import { EthereumService } from 'src/ethereum/ethereum.service';
-import * as CryptoJS from 'crypto-js';
-const { Readable } = require('stream');
+import * as crypto from 'crypto';
 
 @Controller('files')
 export class UploadController {
@@ -48,7 +47,8 @@ export class UploadController {
       const readableStream = stream.Readable.from(file.buffer);
 
       const buffer = file.buffer;
-      const fileHash = CryptoJS.SHA256(buffer.toString()).toString(CryptoJS.enc.Hex);
+      //const fileHash = CryptoJS.SHA256(buffer.toString()).toString(CryptoJS.enc.Hex);
+      const fileHash = crypto.createHash('sha256').update(buffer.toString()).digest('hex');
 
       console.log(fileHash);
       await this.uploadService
@@ -84,23 +84,35 @@ export class UploadController {
   ) {
     try {
       const fileStream = await this.uploadService.getFileStream(fileId);
-      
-      let data = '';
-      fileStream.on('data', (chunk) =>{
-        data += chunk;
-      })
+      const fileHash = await calculateSHA256Hash(fileStream);
+      console.log(fileHash)
+      if (fileHash === body.fileHash) {
+        return res.status(200).json({ isVerified: true });
+      }
 
-      fileStream.on('end', (chunk) =>{
-        const fileHash = CryptoJS.SHA256(data).toString(CryptoJS.enc.Hex);
-
-        if (fileHash == body.fileHash) {
-          return res.status(200).json({ isVerified: true });
-        }
-  
-        return res.status(200).json({ isVerified: false });
-      })
-    } catch (ex) {
       return res.status(200).json({ isVerified: false });
+    } catch (ex) {
+      console.error('Error:', ex);
+      return res.status(500).json({ isVerified: false });
     }
   }
+}
+
+async function calculateSHA256Hash(stream): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const hash = crypto.createHash('sha256');
+    let data = '';
+    stream.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    stream.on('end', () => {
+      const fileHash = hash.update(data).digest('hex');
+      resolve(fileHash);
+    });
+
+    stream.on('error', (error) => {
+      reject(error);
+    });
+  });
 }
