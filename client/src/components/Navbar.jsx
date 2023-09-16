@@ -6,24 +6,35 @@ import { Link } from 'react-router-dom';
 import Header from './Header';
 import { Button } from "@mui/material";
 import LoginComponent from './Login';
+import RegisterComponent from "./Register";
 
 function MyNavBar(props) {
   const { drizzleContext, token } = props;
   const { drizzle, drizzleState } = drizzleContext;
 
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [showRegisterPopup, setShowRegisterPopup] = useState(false);
   const [tokenData, setTokenData] = useState();
 
   useEffect(() => {
     setTokenData(token);
-  }, [token]);
+  }, [drizzleContext]);
 
   const openLoginPopup = () => {
     setShowLoginPopup(true)
   };
+  const openRegisterPopup = () => {
+    setShowRegisterPopup(true)
+  };
   const closeLoginPopup = () => {
     setShowLoginPopup(false)
+  };
+  const successLoginPopup = () => {
+    setShowLoginPopup(false)
     window.location.reload();
+  };
+  const closeRegisterPopup = () => {
+    setShowRegisterPopup(false)
   };
 
   return (
@@ -37,7 +48,9 @@ function MyNavBar(props) {
             <Nav.Link as={Link} to="evidences">Evidences</Nav.Link>
           </Nav>
           {tokenData == null && (<Button sx={{m: "0.5rem"}} onClick={openLoginPopup}> Login </Button>)}
-          <LoginComponent show={showLoginPopup} onClose={closeLoginPopup} onSuccess = {closeLoginPopup} drizzleContext = {drizzleContext}/>
+          {tokenData == null && (<Button sx={{m: "0.5rem"}} onClick={openRegisterPopup}> Register </Button>)}
+          <LoginComponent show={showLoginPopup} onClose={closeLoginPopup} onSuccess = {successLoginPopup} drizzleContext = {drizzleContext}/>
+          <RegisterComponent show={showRegisterPopup} onClose={closeRegisterPopup} onSuccess = {closeRegisterPopup} drizzleContext = {drizzleContext}/>
           <Header drizzle={drizzle} drizzleState={drizzleState} />
         </Navbar.Collapse>
       </Container>
