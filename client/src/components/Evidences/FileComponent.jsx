@@ -40,8 +40,10 @@ function FileComponent(props) {
     }
   };
 
+  
   const handleVerify = async () => {
     try {
+      console.log(file)
         const url = consts.API_URL + `files/${file.fileId}` ; // Replace with your API endpoint
 
         axios.post(url, {fileHash: file.fileHash, fileName:file.fileName}).then(
@@ -77,10 +79,16 @@ function FileComponent(props) {
     }
   }, [file.id]);
 
+  useEffect(() => {
+    if (file.fileId != undefined){
+      handleVerify()
+    }
+  },[file.fileId])
+
   return (
     <div>
         <a> {file.fileName} </a>
-        {file.token && (<Button onClick={handleDownload} > <FileDownload></FileDownload> </Button>)}
+        {file.token && file.isVerified && (<Button onClick={handleDownload} > <FileDownload></FileDownload> </Button>)}
         {file.needVerify && (<Button variant="outlined" color="success" onClick={handleVerify}> Verify </Button>)}
         {file.isVerified && (<Verified color="success"></Verified>)}
         {(!file.isVerified && !file.needVerify) && (<GppBad color="error"></GppBad>)}

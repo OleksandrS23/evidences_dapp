@@ -93,7 +93,7 @@ export class UploadController {
       return res.status(200).json({ isVerified: false });
     } catch (ex) {
       console.error('Error:', ex);
-      return res.status(500).json({ isVerified: false });
+      return res.status(200).json({ isVerified: false });
     }
   }
 }

@@ -25,11 +25,16 @@ function HistoryEvidence(props) {
     }
   }, [data]);
 
+  const onCloseModal = () => {
+    setFormData({});
+    onClose();
+  };
+
   if (!data && !formData.uniqueCode) {
 
   } else {
     return (
-      <Modal show={show} onHide={onClose} centered size="xl">
+      <Modal show={show} onHide={onCloseModal} centered size="xl">
         <Modal.Header closeButton>
           <Modal.Title>History: {formData.evidenceUniqueCode}</Modal.Title>
         </Modal.Header>
@@ -50,7 +55,7 @@ function HistoryEvidence(props) {
         methodArgs = {[formData.evidenceUniqueCode]}
         render={(evidencesData, loading) => {
           if (!loading && evidencesData) {
-            console.log(evidencesData)
+            //console.log(evidencesData)
             return evidencesData.map((evidence, index)=>{
                 var last = index == evidencesData.length - 1? true: false
                 return <TimeLineEvidence evidence={evidence} connector={!last} drizzleContext = {drizzleContext}/>;

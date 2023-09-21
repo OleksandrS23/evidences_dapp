@@ -44,7 +44,7 @@ function TimeLineEvidence(props) {
         evidenceFiles: evidence.uFilesCodes
       });
     }
-    console.log(evidenceData.evidenceFiles)
+    //console.log(evidenceData.evidenceFiles)
   }, [evidence.timestamp]);
 
   return (
@@ -84,7 +84,7 @@ function TimeLineEvidence(props) {
                   methodArgs = {[evidenceData.evidenceUniqueCode,ev]}
                   render={(fileInfo, loading) => {
                     if (!loading && fileInfo) {
-                      console.log(fileInfo)
+                      //console.log(fileInfo)
                       return <FileComponent fileInfo = {fileInfo} />
                     }
                   }}
