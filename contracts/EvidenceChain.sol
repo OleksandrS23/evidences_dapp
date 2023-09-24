@@ -37,15 +37,31 @@ contract EvidenceChain {
         string memory _password,
         string memory _name,
         string memory _departmentCode,
-        string memory _entityType
+        EntitiesManager.EntityType _entityType
     ) public {
-        entitiesManager.addEntity(
+        entitiesManager.createEntity(
             _entity,
             _userName,
             _password,
             _name,
             _departmentCode,
             _entityType
+        );
+    }
+
+    function updateEntity(
+        address _entity,
+        string memory _userName,
+        string memory _password,
+        string memory _name,
+        string memory _departmentCode
+    ) public {
+        entitiesManager.updateEntity(
+            _entity,
+            _userName,
+            _password,
+            _name,
+            _departmentCode
         );
     }
 
@@ -116,17 +132,12 @@ contract EvidenceChain {
     function addEvidence(
         string memory _evidenceUniqueCode,
         string memory _caseNo,
-        string memory _classification,
+        EvidencesManager.EvidenceClassification _classification,
         string memory _evidenceName,
-        string memory _evidenceType
+        EvidencesManager.EvidenceType _evidenceType
     ) public {
         EntitiesManager.Entity memory _entity = entitiesManager.getLastUpdate(
             msg.sender
-        );
-        require(
-            keccak256(abi.encodePacked(_entity.entityType)) ==
-                keccak256("Police"),
-            "Not Police."
         );
         evidencesManager.addEvidence(
             _evidenceUniqueCode,
@@ -170,17 +181,8 @@ contract EvidenceChain {
         view
         returns (EvidencesManager.Evidence[] memory)
     {
-        string[] memory evidencesCodes = evidencesManager.getEvidences();
-        require(evidencesCodes.length > 0, "No Evidences");
-        EvidencesManager.Evidence[]
-            memory evidences = new EvidencesManager.Evidence[](
-                evidencesCodes.length
-            );
-        for (uint32 i = 0; i < evidencesCodes.length; i++) {
-            evidences[i] = evidencesManager.getLastUpdate(evidencesCodes[i]);
-        }
-
-        return evidences;
+        EntitiesManager.Entity memory entity = entitiesManager.getLastUpdate(msg.sender);
+        return evidencesManager.getEvidences(entity);
     }
 
     function getEvidenceHistory(
