@@ -22,7 +22,6 @@ contract EvidencesManager {
 
     enum EvidenceClassification {
     Public,
-    Classified,
     Secret,
     AllowedPersonalOnly
     }
@@ -69,6 +68,8 @@ contract EvidencesManager {
             return "Inactivated";
         } else if (_obs == ObservationsTipified.UpdatedOwner) {
             return "Updated Owner";
+        } else if (_obs == ObservationsTipified.AddAllowedUser) {
+            return "Added Allowed User";
         } else {
             revert("Invalid status");
         }
@@ -106,10 +107,13 @@ contract EvidencesManager {
     function addAllowedUsers (string memory _evidenceUniqueCode, EntitiesManager.Entity[] memory _entities) public {
         Evidence memory evidence = getLastUpdate(_evidenceUniqueCode);
         require(evidence.isActive == true, "Evidence inactive");
-        require(evidence.classification == EvidenceClassification.AllowedPersonalOnly, "Not Classified as Allowed Personal Only");
+        //require(evidence.classification == EvidenceClassification.AllowedPersonalOnly, "Not Classified as Allowed Personal Only");
     
         for (uint32 i = 0; i < _entities.length; i++) {
             evidencesManagerAllowedUsers.addAllowedUser(_evidenceUniqueCode, _entities[i]);
+            //string memory _obs= string(abi.encodePacked(obsToString(ObservationsTipified.AddAllowedUser), ' ', _entities[i].entityAddress, ' ', _entities[i].userName));
+            string memory _obs= string(abi.encodePacked(obsToString(ObservationsTipified.AddAllowedUser), ' ', _entities[i].userName));
+            evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, evidence.caseNo, evidence.classification, evidence.name, evidence.eType, evidence.owner, block.timestamp, new string[](0), true, _obs));
         }
     }
 

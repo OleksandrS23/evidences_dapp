@@ -10,13 +10,14 @@ import {
   Button,
   Paper
 } from "@mui/material";
-import {History, Edit, Send, FileUpload} from '@mui/icons-material';
+import {History, Edit, Send, FileUpload, Add} from '@mui/icons-material';
 import { createTheme, ThemeProvider  } from '@mui/material/styles';
 import EditEvidence from "./EditEvidence";
 import SendEvidence from "./SendEvidence";
 import HistoryEvidence from "./HistoryEvidence";
 import UploadFilesEvidence from "./UploadFilesEvidence";
 import LoginComponent from "../Login";
+import AddAllowedUsers from "./AddAllowedUsers";
 
 let theme = createTheme({
   // Theme customization goes here as usual, including tonalOffset and/or
@@ -52,8 +53,9 @@ function EvidencesTable(props) {
   const [showSendPopup, setShowSendPopup] = React.useState(false);
   const [showUploadPopup, setShowUploadPopup] = React.useState(false);
   const [showLoginPopup, setShowLoginPopup] = React.useState(false);
+  const [showAddAllowedUsersPopup, setShowAddAllowedUsersPopup] = React.useState(false);
   const [actualData, setActualData] = React.useState({});
-
+  
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -85,6 +87,15 @@ function EvidencesTable(props) {
   };
   const closeSendPopup = () => {
     setShowSendPopup(false)
+    setActualData('')
+  };
+
+  const openAddAllowedUsersPopup = (data) => {
+    setActualData(data)
+    setShowAddAllowedUsersPopup(true)
+  };
+  const closeAddAllowedUsersPopup = () => {
+    setShowAddAllowedUsersPopup(false)
     setActualData('')
   };
 
@@ -125,7 +136,7 @@ function EvidencesTable(props) {
       <HistoryEvidence show={showHistoryPopup} onClose={closeHistoryPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
       <UploadFilesEvidence show={showUploadPopup} onClose={closeUploadPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
       <LoginComponent show={showLoginPopup} onClose={closeLoginPopup} onSuccess = {successLogined} drizzleContext = {props.drizzleContext}/>
-
+      <AddAllowedUsers show={showAddAllowedUsersPopup} onClose={closeAddAllowedUsersPopup} drizzleContext = {props.drizzleContext} data = {actualData}/>
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer >
         <Table stickyHeader aria-label="sticky table">
@@ -162,6 +173,7 @@ function EvidencesTable(props) {
                           <Button onClick = {() => openEditPopup(row)} color = "salmon"><Edit/></Button> 
                           <Button onClick = {() => openHistoryPopup(row)}><History/></Button>
                           <Button onClick = {() => openSendPopup(row)} color = "success" ><Send/></Button>
+                          <Button onClick = {() => openAddAllowedUsersPopup(row)} color = "success" ><Add/></Button>
                         </div>
                         }
                         else

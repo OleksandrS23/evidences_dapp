@@ -36,7 +36,7 @@ contract EvidencesManagerAllowedUsers {
             return true;
         }
 
-        if (evidence.classification == EvidencesManager.EvidenceClassification.AllowedPersonalOnly){
+        if (evidence.classification == EvidencesManager.EvidenceClassification.AllowedPersonalOnly || evidence.classification == EvidencesManager.EvidenceClassification.Secret){
             EntitiesManager.Entity[] memory allowedEntities= evidencesAllowedUsers[evidence.uniqueCode];
             for (uint32 i = 0; i < allowedEntities.length; i++){
                 EntitiesManager.Entity memory allowed = allowedEntities[i];

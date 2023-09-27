@@ -149,33 +149,6 @@ contract EvidenceChain {
         );
     }
 
-    // function addEvidence(
-    //     string memory _evidenceUniqueCode,
-    //     string memory _caseNo,
-    //     string memory _classification,
-    //     string memory _evidenceName,
-    //     string memory _evidenceType,
-    //     EvidencesManager.EvidenceFile[] memory _files
-    // ) public {
-    //     EntitiesManager.Entity memory _entity = entitiesManager.getLastUpdate(
-    //         msg.sender
-    //     );
-    //     require(
-    //         keccak256(abi.encodePacked(_entity.entityType)) ==
-    //             keccak256("Police"),
-    //         "Not Police."
-    //     );
-    //     evidencesManager.addEvidence(
-    //         _evidenceUniqueCode,
-    //         _caseNo,
-    //         _classification,
-    //         _evidenceName,
-    //         _evidenceType,
-    //         _entity,
-    //         _files
-    //     );
-    // }
-
     function getEvidences()
         public
         view
@@ -195,6 +168,18 @@ contract EvidenceChain {
         string memory _evidenceUniqueCode
     ) public view returns (EvidencesManager.Evidence memory) {
         return evidencesManager.getLastUpdate(_evidenceUniqueCode);
+    }
+
+    function addAllowedUsers (string memory _evidenceUniqueCode, address[] memory _entities) public onlyOwner(_evidenceUniqueCode) {
+        EntitiesManager.Entity[] memory entities = new EntitiesManager.Entity[](
+            _entities.length
+        );
+
+        for (uint32 i = 0; i < _entities.length; i++) {
+            entities[i] = entitiesManager.getLastUpdate(_entities[i]);
+        }
+
+       evidencesManager.addAllowedUsers(_evidenceUniqueCode, entities);
     }
 
     function evidenceNewOwner(

@@ -9,6 +9,7 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() credentials: any) {
+    console.log(credentials)
     if (!credentials.password) {
       throw new BadRequestException('Password is required.');
     }

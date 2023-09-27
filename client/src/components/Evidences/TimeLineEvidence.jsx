@@ -41,7 +41,8 @@ function TimeLineEvidence(props) {
         evidenceOwner: evidence.owner.name,
         evidenceOwnerType: evidence.owner.entityType,
         evidenceType: evidence.eType,
-        evidenceFiles: evidence.uFilesCodes
+        evidenceFiles: evidence.uFilesCodes,
+        observations: evidence.observations
       });
     }
     //console.log(evidenceData.evidenceFiles)
@@ -51,6 +52,9 @@ function TimeLineEvidence(props) {
     <TimelineItem>
       <TimelineOppositeContent color="textSecondary">
         {evidenceData.date}
+        <br/>
+        <p>Observations:</p>
+        {evidenceData.observations}
       </TimelineOppositeContent>
       <TimelineSeparator>
         <TimelineDot />
