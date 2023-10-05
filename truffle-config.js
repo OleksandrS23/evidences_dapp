@@ -42,10 +42,9 @@ const path = require("path");
  * https://trufflesuite.com/docs/truffle/getting-started/using-the-truffle-dashboard/
  */
 
-// require('dotenv').config();
-// const { MNEMONIC, PROJECT_ID } = process.env;
-
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+require("dotenv").config();
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+const { INFURA_API_KEY, MNEMONIC } = process.env;
 
 module.exports = {
   /**
@@ -71,6 +70,16 @@ module.exports = {
      port: 7545,            // Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
     },
+    sepolia: {
+      provider: () => new HDWalletProvider(MNEMONIC, INFURA_API_KEY),
+      network_id: "11155111", // Sepolia's network ID
+      gas: 6219800, // Adjust the gas limit as per your requirements
+      // gasPrice: 10000000000, // Set the gas price to an appropriate value
+      // confirmations: 2, // Set the number of confirmations needed for a transaction
+      // timeoutBlocks: 200, // Set the timeout for transactions
+      from: "0x810bEFaf873c9109b6c42396f93E5E7F96369155",
+      //skipDryRun: true // Skip the dry run option
+     }
     //
     // An additional network, but with some advanced options…
     // advanced: {

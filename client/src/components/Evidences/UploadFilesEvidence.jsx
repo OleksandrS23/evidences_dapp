@@ -2,10 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from 'axios';
 import consts from '../../manager/consts';
+import { GetFileHash } from "../../manager/filesManger.js";
 
 function UploadFilesEvidence(props) {
   const { show, onClose, drizzleContext, data } = props;
   const { drizzle, drizzleState } = drizzleContext;
+  // const [fromDataToChain, setFormDataToChain] = useState({
+  //   evidenceUniqueCode: data.uniqueCode,
+  //   files: []
+  // }); 
 
   const [formData, setFormData] = useState({
     evidenceUniqueCode: data?.uniqueCode,
@@ -27,12 +32,17 @@ function UploadFilesEvidence(props) {
 
     const formDataReq = new FormData();
     console.log(formData.files)
+    const files = [];
 
     for (let i = 0; i < formData.files.length; i++) {
-        console.log(formData.files[i])
+        // let fileHash = await GetFileHash(formData.files[i])
+        // console.log(formData.files[i])
+        // files.push({filename: formData.files[i].name, fileHash: fileHash})
         formDataReq.append('files', formData.files[i]);
     }
     
+    console.log(files)
+
     const url = consts.API_URL + `files/upload?evidenceCode=${encodeURIComponent(formData.evidenceUniqueCode)}&address=${encodeURIComponent(drizzleContext.drizzleState.accounts[0])}` ; // Replace with your API endpoint
     const token = localStorage.getItem("token");
     try {
@@ -44,10 +54,21 @@ function UploadFilesEvidence(props) {
         });
 
         console.log('Files uploaded:', response.data);
+
+        if (response.data.uploadedFileIds){
+          response.data.uploadedFileIds.forEach(element => {
+          console.log(element)
+           const contractInstance = drizzle.contracts.EvidenceChain;
+           const methodArgs = [formData.evidenceUniqueCode, element.id, element.filename, element.filehash];
+           const stackId = contractInstance.methods.addFile.cacheSend(...methodArgs)
+        });
+      }
+       
         setFormData({});
         onClose();
     } catch (error) {
-      if (error?.response.status === 401){
+      console.log(error)
+      if (error?.response?.status === 401){
         localStorage.removeItem("token")
       }
         console.error('Error uploading files:', error);

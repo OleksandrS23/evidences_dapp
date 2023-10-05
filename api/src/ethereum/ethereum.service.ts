@@ -12,7 +12,7 @@ export class EthereumService {
     );
     this.contract = new this.web3.eth.Contract(
       contractJSON.abi,
-      contractJSON.networks['5777'].address,
+      contractJSON.networks[process.env.NETWORK_ID].address,
     );
   }
 
@@ -22,15 +22,18 @@ export class EthereumService {
     ...args: any[]
   ) {
     var result = [];
+
+    console.log(from, methodName, args)
     try {
       result = await this.contract.methods[methodName](
         ...args
       ).send({
         from: from, // Specify the sender's Ethereum address
         gas: 2000000, // Set an appropriate gas limit
-        // gasPrice: '20000000000' // Set an appropriate gas price
+        gasPrice: '20000000000' // Set an appropriate gas price
       });
       
+      console.log(result)
       return result;
     } catch (error) {
       console.error('Transaction failed:', error);
@@ -49,7 +52,7 @@ export class EthereumService {
       ).call({
         from: from, // Specify the sender's Ethereum address
         gas: 2000000, // Set an appropriate gas limit
-        // gasPrice: '20000000000' // Set an appropriate gas price
+        gasPrice: '20000000000' // Set an appropriate gas price
       });
       
       return result;
