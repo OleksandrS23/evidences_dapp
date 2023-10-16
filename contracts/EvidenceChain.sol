@@ -65,6 +65,10 @@ contract EvidenceChain {
         );
     }
 
+    function approveEntity(address _entityToBeApproved) public {
+        entitiesManager.approveEntity(msg.sender, _entityToBeApproved);
+    }
+
     function getEntities()
         public
         view
@@ -154,14 +158,20 @@ contract EvidenceChain {
         view
         returns (EvidencesManager.Evidence[] memory)
     {
-        EntitiesManager.Entity memory entity = entitiesManager.getLastUpdate(msg.sender);
+        EntitiesManager.Entity memory entity = entitiesManager.getLastUpdate(
+            msg.sender
+        );
         return evidencesManager.getEvidences(entity);
     }
 
     function getEvidenceHistory(
         string memory _evidenceUniqueCode
     ) public view returns (EvidencesManager.Evidence[] memory) {
-        return evidencesManager.getEvidenceHistory(_evidenceUniqueCode);
+        EntitiesManager.Entity memory entity = entitiesManager.getLastUpdate(
+            msg.sender
+        );
+
+        return evidencesManager.getEvidenceHistory(_evidenceUniqueCode, entity);
     }
 
     function getEvidence(
@@ -170,7 +180,10 @@ contract EvidenceChain {
         return evidencesManager.getLastUpdate(_evidenceUniqueCode);
     }
 
-    function addAllowedUsers (string memory _evidenceUniqueCode, address[] memory _entities) public onlyOwner(_evidenceUniqueCode) {
+    function addAllowedUsers(
+        string memory _evidenceUniqueCode,
+        address[] memory _entities
+    ) public onlyOwner(_evidenceUniqueCode) {
         EntitiesManager.Entity[] memory entities = new EntitiesManager.Entity[](
             _entities.length
         );
@@ -179,7 +192,7 @@ contract EvidenceChain {
             entities[i] = entitiesManager.getLastUpdate(_entities[i]);
         }
 
-       evidencesManager.addAllowedUsers(_evidenceUniqueCode, entities);
+        evidencesManager.addAllowedUsers(_evidenceUniqueCode, entities);
     }
 
     function evidenceNewOwner(
@@ -198,7 +211,8 @@ contract EvidenceChain {
         string memory _fileName,
         string memory _fileHash
     ) public onlyOwner(_evidenceUniqueCode) {
-        EvidencesManager.EvidenceFile memory file =  EvidencesManager.EvidenceFile(_fileId, _fileName, _fileHash);
+        EvidencesManager.EvidenceFile memory file = EvidencesManager
+            .EvidenceFile(_fileId, _fileName, _fileHash);
         evidencesManager.addFile(_evidenceUniqueCode, file);
     }
 
@@ -209,11 +223,14 @@ contract EvidenceChain {
         _;
     }
 
-    function getFileInfo(string memory _evidenceUniqueCode, string memory _fileUniqueCode) external view returns (EvidencesManager.EvidenceFile memory)
-    {
-        return evidencesManager.getFileInfo(_evidenceUniqueCode, _fileUniqueCode);
+    function getFileInfo(
+        string memory _evidenceUniqueCode,
+        string memory _fileUniqueCode
+    ) external view returns (EvidencesManager.EvidenceFile memory) {
+        return
+            evidencesManager.getFileInfo(_evidenceUniqueCode, _fileUniqueCode);
     }
-    
+
     // function getProvenance(
     //     uint32 _evidenceId
     // ) external view returns (uint32[] memory) {

@@ -29,15 +29,9 @@ contract EvidencesManager {
     enum EvidenceType {
     Document,
     Image,
-    Video
+    Video,
+    Other
     }
-
-    struct EvidenceFile {
-        string id;
-        string fileName;
-        string fileHash;
-    }
-
 
     struct Evidence {
         string uniqueCode;
@@ -53,6 +47,13 @@ contract EvidencesManager {
     }
 
     mapping(string => Evidence[]) public evidencesHistory;
+
+    struct EvidenceFile {
+        string id;
+        string fileName;
+        string fileHash;
+    }
+    
     mapping(string => EvidenceFile[]) public evidencesFiles;
 
     string[] public allEvidences;
@@ -75,56 +76,82 @@ contract EvidencesManager {
         }
     }
 
-    function addEvidence(string memory _evidenceUniqueCode, string memory _caseNo, EvidenceClassification _classification, string memory _evidenceName, EvidenceType _evidenceType, EntitiesManager.Entity memory _entity) public {
-        if (evidencesHistory[_evidenceUniqueCode].length == 0) 
+    function addEvidence(
+            string memory _evidenceId, 
+            string memory _caseNo, 
+            EvidenceClassification _classification, 
+            string memory _evidenceName, 
+            EvidenceType _evidenceType, 
+            EntitiesManager.Entity memory 
+            _entity)
+    public {
+        if (evidencesHistory[_evidenceId].length == 0) 
         {
-            evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, _caseNo, _classification,_evidenceName, _evidenceType, _entity, block.timestamp, new string[](0), true, obsToString(ObservationsTipified.Created)));
-            allEvidences.push(_evidenceUniqueCode);
+            evidencesHistory[_evidenceId].push(
+                Evidence(_evidenceId, 
+                _caseNo, 
+                _classification,
+                _evidenceName, 
+                _evidenceType, 
+                _entity, 
+                block.timestamp, 
+                new string[](0), 
+                true, 
+                obsToString(ObservationsTipified.Created)));
+
+            allEvidences.push(_evidenceId);
         }
         else{
-            uint totalVersions = evidencesHistory[_evidenceUniqueCode].length;
-            Evidence memory lastEvidence = evidencesHistory[_evidenceUniqueCode][totalVersions - 1];
-            require(lastEvidence.owner.entityAddress == _entity.entityAddress, "Not Owner");
-            require(lastEvidence.isActive == true, "Evidence inactive");
-            evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, _caseNo, _classification,_evidenceName, _evidenceType, _entity, block.timestamp, new string[](0), true, obsToString(ObservationsTipified.Updated)));
+            Evidence memory lastUpdateEvidence = getLastUpdate(_evidenceId);
+            require(lastUpdateEvidence.owner.entityAddress == _entity.entityAddress, "Not Owner");
+            require(lastUpdateEvidence.isActive == true, "Evidence inactive");
+            evidencesHistory[_evidenceId].push(
+                    Evidence(_evidenceId, 
+                            _caseNo, 
+                            _classification,
+                            _evidenceName, 
+                            _evidenceType, 
+                            _entity, 
+                            block.timestamp, 
+                            new string[](0), 
+                            true, 
+                            obsToString(ObservationsTipified.Updated)));
         }
 
         if (_classification == EvidenceClassification.AllowedPersonalOnly){
-            evidencesManagerAllowedUsers.addAllowedUser(_evidenceUniqueCode, _entity);
+            evidencesManagerAllowedUsers.addAllowedUser(_evidenceId, _entity);
         }
     }
 
-    function addFile(string memory _evidenceUniqueCode, EvidenceFile memory _file) public {
-        Evidence memory evidence = getLastUpdate(_evidenceUniqueCode);
+    function addFile(string memory _evidenceId, EvidenceFile memory _file) public {
+        Evidence memory evidence = getLastUpdate(_evidenceId);
         require(evidence.isActive == true, "Evidence inactive");
         string[] memory fileIds = new string[](1);
         fileIds[0] = _file.id;
-        evidencesFiles[_evidenceUniqueCode].push(EvidenceFile(_file.id, _file.fileName, _file.fileHash));
+        evidencesFiles[_evidenceId].push(EvidenceFile(_file.id, _file.fileName, _file.fileHash));
 
-        evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, evidence.caseNo, evidence.classification, evidence.name, evidence.eType, evidence.owner, block.timestamp, fileIds, true, obsToString(ObservationsTipified.AddFile)));
+        evidencesHistory[_evidenceId].push(Evidence(_evidenceId, evidence.caseNo, evidence.classification, evidence.name, evidence.eType, evidence.owner, block.timestamp, fileIds, true, obsToString(ObservationsTipified.AddFile)));
     }
 
-    function addAllowedUsers (string memory _evidenceUniqueCode, EntitiesManager.Entity[] memory _entities) public {
-        Evidence memory evidence = getLastUpdate(_evidenceUniqueCode);
+    function addAllowedUsers (string memory _evidenceId, EntitiesManager.Entity[] memory _entities) public {
+        Evidence memory evidence = getLastUpdate(_evidenceId);
         require(evidence.isActive == true, "Evidence inactive");
-        //require(evidence.classification == EvidenceClassification.AllowedPersonalOnly, "Not Classified as Allowed Personal Only");
     
         for (uint32 i = 0; i < _entities.length; i++) {
-            evidencesManagerAllowedUsers.addAllowedUser(_evidenceUniqueCode, _entities[i]);
-            //string memory _obs= string(abi.encodePacked(obsToString(ObservationsTipified.AddAllowedUser), ' ', _entities[i].entityAddress, ' ', _entities[i].userName));
+            evidencesManagerAllowedUsers.addAllowedUser(_evidenceId, _entities[i]);
             string memory _obs= string(abi.encodePacked(obsToString(ObservationsTipified.AddAllowedUser), ' ', _entities[i].userName));
-            evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, evidence.caseNo, evidence.classification, evidence.name, evidence.eType, evidence.owner, block.timestamp, new string[](0), true, _obs));
+            evidencesHistory[_evidenceId].push(Evidence(_evidenceId, evidence.caseNo, evidence.classification, evidence.name, evidence.eType, evidence.owner, block.timestamp, new string[](0), true, _obs));
         }
     }
 
 
-    function updateOwner(string memory _evidenceUniqueCode, EntitiesManager.Entity memory _entity)public 
+    function updateOwner(string memory _evidenceId, EntitiesManager.Entity memory _entity)public 
     {
-        Evidence memory evidence = getLastUpdate(_evidenceUniqueCode);
+        Evidence memory evidence = getLastUpdate(_evidenceId);
         require(evidence.isActive == true, "Evidence inactive");
-        evidencesHistory[_evidenceUniqueCode].push(Evidence(_evidenceUniqueCode, evidence.caseNo, evidence.classification, evidence.name, evidence.eType, _entity, block.timestamp, new string[](0), true, obsToString(ObservationsTipified.UpdatedOwner)));
+        evidencesHistory[_evidenceId].push(Evidence(_evidenceId, evidence.caseNo, evidence.classification, evidence.name, evidence.eType, _entity, block.timestamp, new string[](0), true, obsToString(ObservationsTipified.UpdatedOwner)));
         if (evidence.classification == EvidenceClassification.AllowedPersonalOnly){
-            evidencesManagerAllowedUsers.addAllowedUser(_evidenceUniqueCode, _entity);
+            evidencesManagerAllowedUsers.addAllowedUser(_evidenceId, _entity);
         }
     }
 
@@ -151,24 +178,27 @@ contract EvidencesManager {
         return evidences;
     }
 
-    function getEvidenceHistory(string memory _evidenceUniqueCode) public view returns (Evidence[] memory) {
-        return evidencesHistory[_evidenceUniqueCode];
+    function getEvidenceHistory(string memory _evidenceId, EntitiesManager.Entity memory entity) public view returns (Evidence[] memory) {
+        Evidence memory evidence = getLastUpdate(_evidenceId);
+        require(evidencesManagerAllowedUsers.checkIfAllowed(evidence, entity), "Not Allowed");
+        
+        return evidencesHistory[_evidenceId];
     }
 
-    function getFileInfo(string memory _evidenceUniqueCode, string memory _fileId) public view returns (EvidenceFile memory){
+    function getFileInfo(string memory _evidenceId, string memory _fileId) public view returns (EvidenceFile memory){
         EvidenceFile memory evidenceFile;
-        for (uint256 i = 0; i < evidencesFiles[_evidenceUniqueCode].length; i++) {
-            if (keccak256(abi.encodePacked(evidencesFiles[_evidenceUniqueCode][i].id)) == keccak256(abi.encodePacked(_fileId))) {
-                return evidencesFiles[_evidenceUniqueCode][i];
+        for (uint256 i = 0; i < evidencesFiles[_evidenceId].length; i++) {
+            if (keccak256(abi.encodePacked(evidencesFiles[_evidenceId][i].id)) == keccak256(abi.encodePacked(_fileId))) {
+                return evidencesFiles[_evidenceId][i];
             }
         }
         return evidenceFile;
     }
 
-    function getLastUpdate (string memory _evidenceUniqueCode) public view returns (Evidence memory) {
-        uint totalVersions = evidencesHistory[_evidenceUniqueCode].length;
+    function getLastUpdate (string memory _evidenceId) public view returns (Evidence memory) {
+        uint totalVersions = evidencesHistory[_evidenceId].length;
         require(totalVersions > 0, "Evidence not found");
 
-        return evidencesHistory[_evidenceUniqueCode][totalVersions - 1];
+        return evidencesHistory[_evidenceId][totalVersions - 1];
     }
 }

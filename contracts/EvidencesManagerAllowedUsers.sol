@@ -32,10 +32,6 @@ contract EvidencesManagerAllowedUsers {
             return true;
         }
 
-        if (entity.entityType == EntitiesManager.EntityType.Lawyer && evidence.classification != EvidencesManager.EvidenceClassification.AllowedPersonalOnly && evidence.classification != EvidencesManager.EvidenceClassification.Secret){
-            return true;
-        }
-
         if (evidence.classification == EvidencesManager.EvidenceClassification.AllowedPersonalOnly || evidence.classification == EvidencesManager.EvidenceClassification.Secret){
             EntitiesManager.Entity[] memory allowedEntities= evidencesAllowedUsers[evidence.uniqueCode];
             for (uint32 i = 0; i < allowedEntities.length; i++){

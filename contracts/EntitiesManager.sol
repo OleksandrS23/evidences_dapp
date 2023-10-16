@@ -6,7 +6,8 @@ contract EntitiesManager {
     LawEnforcementAgent,
     Forensics,
     Court,
-    Lawyer
+    Lawyer,
+    Administrator
     }
 
     struct Entity {
@@ -16,7 +17,9 @@ contract EntitiesManager {
         string departmentCode;
         EntityType entityType;
         address entityAddress;
-        uint32 timestamp;
+        uint256 timestamp;
+        bool isApproved;
+        address approverAddress;
     }
 
     mapping(address => Entity[]) public entitiesHistory;
@@ -26,16 +29,25 @@ contract EntitiesManager {
         require(entitiesHistory[_entity].length == 0, "Already Registred");
         if (entitiesHistory[_entity].length == 0) 
         {
-            entitiesHistory[_entity].push(Entity(_userName, _password, _name, _departmentCode, _entityType, _entity,  uint32(block.timestamp)));
+            entitiesHistory[_entity].push(Entity(_userName, _password, _name, _departmentCode, _entityType, _entity,  block.timestamp, false, _entity));
             allEntities.push(_entity);
         }
     }
 
     function updateEntity(address _entity, string memory _userName, string memory _password, string memory _name, string  memory _departmentCode) public {
-        require(keccak256(bytes(entitiesHistory[_entity][(entitiesHistory[_entity].length)-1].userName)) == keccak256(bytes(_userName)), "User Name Didn't Match");
-        require(keccak256(bytes(entitiesHistory[_entity][(entitiesHistory[_entity].length)-1].password)) == keccak256(bytes(_password)), "Password Didn't Match");
-        Entity memory lastUpdate = getLastUpdate(_entity);
-        entitiesHistory[_entity].push(Entity(_userName, _password, _name, _departmentCode, lastUpdate.entityType, _entity,  uint32(block.timestamp)));
+        Entity memory entity = getLastUpdate(_entity);
+        require(keccak256(bytes(entity.userName)) == keccak256(bytes(_userName)), "User Name Didn't Match");
+        require(keccak256(bytes(entity.password)) == keccak256(bytes(_password)), "Password Didn't Match");
+        entitiesHistory[_entity].push(Entity(_userName, _password, _name, _departmentCode, entity.entityType, _entity,  block.timestamp, false, _entity));
+    }
+
+    function approveEntity(address _entity, address _entityToBeApproved) public {
+        Entity memory entity = getLastUpdate(_entity);
+        require(entity.entityType == EntityType.Administrator, "Not Administrator");
+        Entity memory entityToBeApproved = getLastUpdate(_entityToBeApproved);
+        require(entityToBeApproved.isApproved == false, "Already Approved");
+        
+        entitiesHistory[_entityToBeApproved].push(Entity(entityToBeApproved.userName, entityToBeApproved.password, entityToBeApproved.name, entityToBeApproved.departmentCode, entity.entityType, entityToBeApproved.entityAddress,  block.timestamp, true, _entity));
     }
 
     function getEntities() public view returns (address[] memory) {
