@@ -18,10 +18,9 @@ import HistoryEvidence from "./HistoryEvidence";
 import UploadFilesEvidence from "./UploadFilesEvidence";
 import LoginComponent from "../Login";
 import AddAllowedUsers from "./AddAllowedUsers";
+import { getEvidenceTypeDescription, getEvidenceClassificationDescription } from "../../enums/EvidenceEnums";
 
 let theme = createTheme({
-  // Theme customization goes here as usual, including tonalOffset and/or
-  // contrastThreshold as the augmentColor() function relies on these
 });
 
 theme = createTheme(theme, {
@@ -39,9 +38,9 @@ theme = createTheme(theme, {
 const columns = [
   { id: "uniqueCode", label: "ID", minWidth: 100 },
   { id: "caseNo", label: "Case No", minWidth: 100 },
-  { id: "classification", label: "Classification", minWidth: 100 },
+  { id: "classification", label: "Classification", minWidth: 100 , enum: true, enumDescription: getEvidenceClassificationDescription},
   { id: "name", label: "Name", minWidth: 100 },
-  { id: "eType", label: "Type", minWidth: 100 },
+  { id: "eType", label: "Type", minWidth: 100 , enum: true, enumDescription: getEvidenceTypeDescription},
   { id: "owner", detail: "name" ,label: "Owner", minWidth: 100 },
   { label: "Actions", minWidth: 100}
 ];
@@ -163,6 +162,10 @@ function EvidencesTable(props) {
                       var value = row[column.id];
                       if (column.detail !== undefined){
                         value= value[column.detail]
+                      }
+
+                      if (column.enum == true){
+                        value = column.enumDescription(row[column.id]);
                       }
 
                       if (column.label === "Actions"){

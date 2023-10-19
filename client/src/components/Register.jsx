@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, Dropdown } from "react-bootstrap";
 import { login } from "../manager/auth.js";
+import { EntityType, getEntityTypeDescription } from "../enums/EntityEnums.js";
+import EnumDropdown from "./EnumDropDown.jsx";
+
 
 function RegisterComponent(props) {
   const { show, onClose, onSuccess, drizzleContext } = props;
@@ -9,16 +12,17 @@ function RegisterComponent(props) {
     name: "",
     departmentCode: "",
     password: "",
-    type: "",
     username: "",
     confpassword: "",
   });
   const [validated, setValidated] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
 
+  const [selectedEntity, setSelectedEntity] = useState(null);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData)
+    
     const form = event.currentTarget;
     setValidated(true);
     if (formData.password != formData.confpassword) {
@@ -36,7 +40,7 @@ function RegisterComponent(props) {
          formData.password,
          formData.name,
          formData.departmentCode,
-         formData.type,
+         selectedEntity
        ];
        const stackId = contractInstance.methods.addEntity.cacheSend(
          ...methodArgs
@@ -92,17 +96,8 @@ function RegisterComponent(props) {
           />
         </Form.Group>
 
-        <Form.Group className="mt-1" controlId="register.type">
-          <Form.Label>Type</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
+        <EnumDropdown title = {"Type"} entityEnum = {EntityType}  onSelect={setSelectedEntity} enumDescription = {getEntityTypeDescription}></EnumDropdown>
+        
         <Form.Group className="mt-1" controlId="register.departmentCode">
           <Form.Label>Department Code</Form.Label>
           <Form.Control

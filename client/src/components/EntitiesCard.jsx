@@ -10,6 +10,7 @@ import {
   ButtonBase,
 } from "@mui/material";
 import { Card, Row, Col, ListGroup } from "react-bootstrap";
+import { getEntityTypeDescription } from "../enums/EntityEnums";
 
 function EntitiesCard(props) {
   const { drizzleContext, EntitiesData } = props;
@@ -56,7 +57,7 @@ function EntitiesCard(props) {
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {" "}
-                    {entities.entityType}{" "}
+                    {getEntityTypeDescription(entities.entityType)}{" "}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {" "}

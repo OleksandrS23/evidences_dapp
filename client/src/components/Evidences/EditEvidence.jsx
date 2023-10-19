@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { EvidenceClassification, EvidenceType, getEvidenceClassificationDescription, getEvidenceTypeDescription } from "../../enums/EvidenceEnums";
+import EnumDropdown from '../EnumDropDown';
 
 function EditEvidence(props) {
   const { show, onClose , drizzleContext, data} = props
@@ -12,14 +14,15 @@ function EditEvidence(props) {
         evidenceName: data?.name, 
         evidenceType: data?.eType});
 
+  const [selectedClassification, setSelectedClassification] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
+
    useEffect(() => {
             if (data) {
               setFormData({
                 evidenceUniqueCode: data.uniqueCode,
                 evidenceCaseNo: data.caseNo,
-                evidenceClassification : data.classification,
-                evidenceName: data.name,
-                evidenceType: data.eType
+                evidenceName: data.name
               });
             }
           }, [data])
@@ -27,9 +30,9 @@ function EditEvidence(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData)
+    
     const contractInstance = drizzle.contracts.EvidenceChain;
-    const methodArgs = [formData.evidenceUniqueCode, formData.evidenceCaseNo, formData.evidenceClassification, formData.evidenceName, formData.evidenceType];
+    const methodArgs = [formData.evidenceUniqueCode, formData.evidenceCaseNo, selectedClassification, formData.evidenceName, selectedType];
     console.log(methodArgs)
     const stackId = contractInstance.methods.addEvidence.cacheSend(...methodArgs)
     setFormData({});
@@ -54,12 +57,14 @@ function EditEvidence(props) {
               required
               type="text"
               name="evidenceCaseNo"
-              placeholder="123456"
+              placeholder="NO.0000"
               value={formData.evidenceCaseNo}
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group className="mt-1" controlId="evidence.evidenceClassification">
+
+          <EnumDropdown title = {"Classification"} entityEnum = {EvidenceClassification}  onSelect={setSelectedClassification} enumDescription = {getEvidenceClassificationDescription}></EnumDropdown>
+          {/* <Form.Group className="mt-1" controlId="evidence.evidenceClassification">
             <Form.Label>Classification</Form.Label>
             <Form.Control
               required
@@ -68,8 +73,8 @@ function EditEvidence(props) {
               placeholder="Normal"
               value={formData.evidenceClassification}
               onChange={handleChange}
-            />
-          </Form.Group>
+            /> 
+          </Form.Group>*/}
       <Form onSubmit={handleSubmit}>
           <Form.Group className="mt-1" controlId="evidence.evidenceName">
             <Form.Label>Name</Form.Label>
@@ -81,7 +86,9 @@ function EditEvidence(props) {
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group className="mt-1" controlId="evidence.evidenceType">
+
+          <EnumDropdown title = {"Type"} entityEnum = {EvidenceType}  onSelect={setSelectedType} enumDescription = {getEvidenceTypeDescription}></EnumDropdown>
+          {/* <Form.Group className="mt-1" controlId="evidence.evidenceType">
             <Form.Label>Type</Form.Label>
             <Form.Control
               type="text"
@@ -90,7 +97,7 @@ function EditEvidence(props) {
               value={formData.evidenceType}
               onChange={handleChange}
             />
-          </Form.Group>
+          </Form.Group> */}
         </Form>
       </Modal.Body>
       <Modal.Footer>

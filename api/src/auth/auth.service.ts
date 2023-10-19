@@ -11,11 +11,7 @@ export class AuthService {
   }
 
   async validateUser(address: string, username: string, password: string): Promise<any> {
-    const user = await this.ethereumService.callContractTransaction(address, "authenticateEntity", ...[username, password]);
-    if (user){
-      return {username: username, password: password};
-    }
-    return null
+    return await this.ethereumService.callContractTransaction(address, "authenticateEntity", ...[username, password]);
   }
 
   async verifyUser(address: string, username: string): Promise<any> {

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
+import EnumDropdown from "../EnumDropDown";
+import { EvidenceClassification, EvidenceType, getEvidenceClassificationDescription, getEvidenceTypeDescription } from "../../enums/EvidenceEnums";
 
 function AddEvidence(props) {
   const { show, onClose, drizzleContext } = props;
@@ -8,10 +10,11 @@ function AddEvidence(props) {
   const [formData, setFormData] = useState({
     evidenceUniqueCode: "",
     evidenceCaseNo: "",
-    evidenceClassification: "",
     evidenceName: "",
-    evidenceType: "",
   });
+
+  const [selectedClassification, setSelectedClassification] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
   const [validated, setValidated] = useState(false);
 
   const handleSubmit = async (event) => {
@@ -22,9 +25,11 @@ function AddEvidence(props) {
       const methodArgs = [
         formData.evidenceUniqueCode,
         formData.evidenceCaseNo,
-        formData.evidenceClassification,
+        selectedClassification,
+        //formData.evidenceClassification,
         formData.evidenceName,
-        formData.evidenceType,
+        selectedType
+        //formData.evidenceType,
       ];
       const stackId = contractInstance.methods.addEvidence.cacheSend(
         ...methodArgs
@@ -55,7 +60,7 @@ function AddEvidence(props) {
               required
               type="text"
               name="evidenceUniqueCode"
-              placeholder="EvidenceId1"
+              placeholder="Unique ID"
               value={formData.evidenceUniqueCode}
               onChange={handleChange}
             />
@@ -66,22 +71,14 @@ function AddEvidence(props) {
               required
               type="text"
               name="evidenceCaseNo"
-              placeholder="123456"
+              placeholder="NO.0000"
               value={formData.evidenceCaseNo}
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group className="mt-1" controlId="evidence.evidenceClassification">
-            <Form.Label>Classification</Form.Label>
-            <Form.Control
-              required
-              type="text"
-              name="evidenceClassification"
-              placeholder="Normal"
-              value={formData.evidenceClassification}
-              onChange={handleChange}
-            />
-          </Form.Group>
+
+          <EnumDropdown title = {"Classification"} entityEnum = {EvidenceClassification}  onSelect={setSelectedClassification} enumDescription = {getEvidenceClassificationDescription}></EnumDropdown>
+          
           <Form.Group className="mt-1" controlId="evidence.evidenceName">
             <Form.Label>Name</Form.Label>
             <Form.Control
@@ -93,17 +90,8 @@ function AddEvidence(props) {
               onChange={handleChange}
             />
           </Form.Group>
-          <Form.Group className="mt-1 mb-3" controlId="evidence.evidenceType">
-            <Form.Label>Type</Form.Label>
-            <Form.Control
-              required
-              type="text"
-              name="evidenceType"
-              placeholder="File"
-              value={formData.evidenceType}
-              onChange={handleChange}
-            />
-          </Form.Group>
+
+          <EnumDropdown title = {"Type"} entityEnum = {EvidenceType}  onSelect={setSelectedType} enumDescription = {getEvidenceTypeDescription}></EnumDropdown>
           <div className="d-flex justify-content-end">
           <Button style={{ marginRight: '10px' }} variant="secondary" onClick={onClose}>
             Close

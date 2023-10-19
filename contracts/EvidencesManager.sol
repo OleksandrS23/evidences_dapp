@@ -118,9 +118,7 @@ contract EvidencesManager {
                             obsToString(ObservationsTipified.Updated)));
         }
 
-        if (_classification == EvidenceClassification.AllowedPersonalOnly){
-            evidencesManagerAllowedUsers.addAllowedUser(_evidenceId, _entity);
-        }
+        evidencesManagerAllowedUsers.addAllowedUser(_evidenceId, _entity);
     }
 
     function addFile(string memory _evidenceId, EvidenceFile memory _file) public {

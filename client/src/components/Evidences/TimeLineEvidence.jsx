@@ -13,6 +13,8 @@ import TimelineOppositeContent, {
   timelineOppositeContentClasses,
 } from "@mui/lab/TimelineOppositeContent";
 import FileComponent from "./FileComponent";
+import { getEvidenceTypeDescription, getEvidenceClassificationDescription } from "../../enums/EvidenceEnums";
+import { getEntityTypeDescription } from "../../enums/EntityEnums";
 
 const { ContractData } = newContextComponents;
 
@@ -68,14 +70,14 @@ function TimeLineEvidence(props) {
               Case No: {evidenceData.evidenceCaseNo}
             </ListGroup.Item>
             <ListGroup.Item>
-              Classification: {evidenceData.evidenceClassification}
+              Classification: {getEvidenceClassificationDescription(evidenceData.evidenceClassification)}
             </ListGroup.Item>
             <ListGroup.Item>
               {evidenceData.evidenceOwner} <br /> Type:{" "}
-              {evidenceData.evidenceOwnerType}
+              {getEntityTypeDescription(evidenceData.evidenceOwnerType)}
             </ListGroup.Item>
             <ListGroup.Item>
-              Type: {evidenceData.evidenceType}
+              Type: {getEvidenceTypeDescription(evidenceData.evidenceType)}
             </ListGroup.Item>
             {evidenceData.evidenceFiles?.length > 0 && (<ListGroup.Item>
               File: {evidenceData.evidenceFiles.map(ev=> {
