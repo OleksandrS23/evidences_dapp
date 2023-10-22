@@ -137,7 +137,7 @@ contract EvidencesManager {
     
         for (uint32 i = 0; i < _entities.length; i++) {
             evidencesManagerAllowedUsers.addAllowedUser(_evidenceId, _entities[i]);
-            string memory _obs= string(abi.encodePacked(obsToString(ObservationsTipified.AddAllowedUser), ' ', _entities[i].userName));
+            string memory _obs= string(abi.encodePacked(obsToString(ObservationsTipified.AddAllowedUser), ' ', _entities[i].name));
             evidencesHistory[_evidenceId].push(Evidence(_evidenceId, evidence.caseNo, evidence.classification, evidence.name, evidence.eType, evidence.owner, block.timestamp, new string[](0), true, _obs));
         }
     }

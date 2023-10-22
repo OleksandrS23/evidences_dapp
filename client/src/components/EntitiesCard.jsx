@@ -29,7 +29,7 @@ function EntitiesCard(props) {
           condition = false;
         }
         return (
-          <Col md="auto" className="mb-2" key={entities.entityAddress}>
+          <Col md="4" className="mb-2" key={entities.entityAddress}>
             <MiuCard
               sx={{
                 boxShadow: condition

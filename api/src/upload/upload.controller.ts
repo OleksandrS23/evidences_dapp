@@ -33,11 +33,7 @@ export class UploadController {
   @UseInterceptors(FilesInterceptor('files'))
   async uploadFiles(
     @UploadedFiles() files: Array<Express.Multer.File>,
-    @Query('evidenceCode') evidenceCode: string,
-    @Query('address') address: string,
   ) {
-    console.log(evidenceCode, address);
-
     if (!files || files.length === 0) {
       return { message: 'No files uploaded' };
     }

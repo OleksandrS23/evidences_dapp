@@ -35,15 +35,12 @@ function UploadFilesEvidence(props) {
     const files = [];
 
     for (let i = 0; i < formData.files.length; i++) {
-        // let fileHash = await GetFileHash(formData.files[i])
-        // console.log(formData.files[i])
-        // files.push({filename: formData.files[i].name, fileHash: fileHash})
         formDataReq.append('files', formData.files[i]);
     }
     
     console.log(files)
 
-    const url = consts.API_URL + `files/upload?evidenceCode=${encodeURIComponent(formData.evidenceUniqueCode)}&address=${encodeURIComponent(drizzleContext.drizzleState.accounts[0])}` ; // Replace with your API endpoint
+    const url = consts.API_URL + `files/upload` ;
     const token = localStorage.getItem("token");
     try {
         const response = await axios.post(url, formDataReq, {

@@ -29,7 +29,6 @@ function Evidences(props) {
         method="getEvidences"
         render={(evidencesData, loading) => {
           if (!loading && evidencesData) {
-            //console.log(evidencesData)
             return <EvidencesTable EvidencesData = {evidencesData} drizzleContext = {drizzleContext} />;
           }
         }}
