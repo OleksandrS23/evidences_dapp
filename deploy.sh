@@ -5,7 +5,8 @@ destination_directory_client="./client/src/contracts"
 destination_directory_api="./api/src/contracts"
 
 # Deploy contracts
-truffle migrate
+#truffle migrate
+truffle migrate --network sepolia
 
 # Copy files from source to destination for client
 cp -r "$source_directory"/* "$destination_directory_client"/

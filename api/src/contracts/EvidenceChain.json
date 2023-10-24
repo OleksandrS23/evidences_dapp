@@ -43037,12 +43037,12 @@
     "11155111": {
       "events": {},
       "links": {},
-      "address": "0xAe183E466a4E52cc16E9121cf6748f7CC1132E0f",
-      "transactionHash": "0x6e19308c689364865958054eecc6db345cebc6f261377cb37503161a24a1090e"
+      "address": "0xAb5dC27495353c9f9853Fe0C8dff2e00CFF71f12",
+      "transactionHash": "0xc85a1ab9d4f150bd88e17ab9b2285b0def7467443c64c5be66a372b33d65c52d"
     }
   },
   "schemaVersion": "3.4.13",
-  "updatedAt": "2023-10-22T12:58:20.628Z",
+  "updatedAt": "2023-10-23T19:30:27.529Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

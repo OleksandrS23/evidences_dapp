@@ -39051,12 +39051,12 @@
     "11155111": {
       "events": {},
       "links": {},
-      "address": "0xF363157017E1DAF5E1D4F28DA8E403Aa53e1BBA1",
-      "transactionHash": "0x06aa155211f75cd45589d79bb8a9bfcfc67fda95621b5535653327245c80b7a0"
+      "address": "0xEa216f5843D87b58eAD0Df44F335A0aEbcf489d9",
+      "transactionHash": "0x519a56a9322120284d7712942ee60d7f32593b7e58a25da2bf94fce36af7cbc4"
     }
   },
   "schemaVersion": "3.4.13",
-  "updatedAt": "2023-10-22T12:58:20.664Z",
+  "updatedAt": "2023-10-23T19:30:27.564Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

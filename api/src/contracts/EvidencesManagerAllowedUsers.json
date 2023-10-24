@@ -15475,12 +15475,12 @@
     "11155111": {
       "events": {},
       "links": {},
-      "address": "0xBA8aDc245c6C45013A05888eF8f83baa1e5b5B4B",
-      "transactionHash": "0x438cc8b9a056bbdc532c9bb24727f755a069148c3fc884a8a0cce0131b163d7e"
+      "address": "0x529eaaE1E8004978d39115094514f7003F814fF1",
+      "transactionHash": "0xd2338767262a64d430ba9d3615498267deaa4cad2677bfbbb41de4194fd6e076"
     }
   },
   "schemaVersion": "3.4.13",
-  "updatedAt": "2023-10-22T12:58:20.681Z",
+  "updatedAt": "2023-10-23T19:30:27.580Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

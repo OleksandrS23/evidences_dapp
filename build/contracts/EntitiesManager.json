@@ -20697,12 +20697,12 @@
     "11155111": {
       "events": {},
       "links": {},
-      "address": "0xce139a94D08eD1F72512A8B08Bd6Ca912b055fff",
-      "transactionHash": "0x32af643101086fc1d9ce28374039491cdeed886e6fb3187fccfe7fdeef3fadf2"
+      "address": "0xCBDcf0AbFd7628596E22FD615A91eC4E67fF3900",
+      "transactionHash": "0xbc97cd4c3223b58ce5845e48bd21ff73744200a3abf514fe4248fe0105be6502"
     }
   },
   "schemaVersion": "3.4.13",
-  "updatedAt": "2023-10-22T12:58:20.648Z",
+  "updatedAt": "2023-10-23T19:30:27.549Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
