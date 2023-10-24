@@ -11,11 +11,11 @@ async function bootstrap() {
   console.log(process.env.NETWORK_ID)
 
   app.use(cors({
-    origin: 'http://localhost:3000', // Replace with the URL of your frontend app
+    origin: 'https://evidencesdapp.azurewebsites.net/', // Replace with the URL of your frontend app
     methods: ['GET', 'POST'], // Add other methods as needed
     credentials: true, // Allow cookies to be sent
   }));
 
-  await app.listen(3001);
+  await app.listen(process.env.WEBSITES_PORT);
 }
 bootstrap();

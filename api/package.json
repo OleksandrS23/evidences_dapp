@@ -17,21 +17,24 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "start:azure": "npm run build && func host start"
   },
   "dependencies": {
+    "@azure/functions": "^1.0.3",
+    "@nestjs/azure-func-http": "^0.10.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/jwt": "^10.1.0",
     "@nestjs/mongoose": "^10.0.1",
     "@nestjs/passport": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@schematics/angular": "^16.2.7",
     "@types/multer-gridfs-storage": "^4.0.5",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.3.1",
-    "mongo-gridfs": "github:khoapmd/mongo-gridfs",
     "mongoose": "^7.5.1",
     "multer-gridfs-storage": "^5.0.2",
     "passport": "^0.6.0",
@@ -40,7 +43,6 @@
     "reflect-metadata": "^0.1.13",
     "resource": "^0.8.1",
     "rxjs": "^7.8.1",
-    "s": "^1.0.0",
     "web3": "^4.1.1"
   },
   "devDependencies": {
