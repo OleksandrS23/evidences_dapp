@@ -20,13 +20,23 @@ import { AuthGuard } from '@nestjs/passport';
 import { EthereumService } from 'src/ethereum/ethereum.service';
 import { SHA256, enc } from 'crypto-js';
 import * as crypto from 'crypto';
+import { ChangeStreamService } from './Service/changeStream.service';
 
 @Controller('files')
 export class UploadController {
   constructor(
     private readonly uploadService: UploadService,
     private readonly ethereumService: EthereumService,
+    private readonly changeStreamService : ChangeStreamService
   ) {}
+
+
+  @Get()
+  async getLogs(@Res() res: Response) {
+    const logs = await this.changeStreamService.returnLogs();
+    return res.status(200).json({ logs });
+  }
+
 
   @UseGuards(AuthGuard('eth-jwt'))
   @Post('upload')

@@ -31,14 +31,14 @@ function UploadFilesEvidence(props) {
     event.preventDefault();
 
     const formDataReq = new FormData();
-    console.log(formData.files)
+    //console.log(formData.files)
     const files = [];
 
     for (let i = 0; i < formData.files.length; i++) {
         formDataReq.append('files', formData.files[i]);
     }
     
-    console.log(files)
+    //console.log(files)
 
     const url = consts.API_URL + `files/upload` ;
     const token = localStorage.getItem("token");
@@ -50,11 +50,11 @@ function UploadFilesEvidence(props) {
             }
         });
 
-        console.log('Files uploaded:', response.data);
+        //console.log('Files uploaded:', response.data);
 
         if (response.data.uploadedFileIds){
           response.data.uploadedFileIds.forEach(element => {
-          console.log(element)
+          //console.log(element)
            const contractInstance = drizzle.contracts.EvidenceChain;
            const methodArgs = [formData.evidenceUniqueCode, element.id, element.filename, element.filehash];
            const stackId = contractInstance.methods.addFile.cacheSend(...methodArgs)
@@ -64,7 +64,7 @@ function UploadFilesEvidence(props) {
         setFormData({});
         onClose();
     } catch (error) {
-      console.log(error)
+      //console.log(error)
       if (error?.response?.status === 401){
         localStorage.removeItem("token")
       }

@@ -33,7 +33,7 @@ function EditEvidence(props) {
     
     const contractInstance = drizzle.contracts.EvidenceChain;
     const methodArgs = [formData.evidenceUniqueCode, formData.evidenceCaseNo, selectedClassification, formData.evidenceName, selectedType];
-    console.log(methodArgs)
+    //console.log(methodArgs)
     const stackId = contractInstance.methods.addEvidence.cacheSend(...methodArgs)
     setFormData({});
     onClose();

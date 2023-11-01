@@ -3,11 +3,11 @@ import consts from './consts';
 import axios from 'axios';
 
 export function login(address, user, password, callback) {
-    console.log(consts.API_URL);
+    //console.log(consts.API_URL);
     return axios
       .post(consts.API_URL + "auth/login", { address, user, password }, consts.HEADER_SIMPLE)
       .then(res => {
-        console.log(res);
+        //console.log(res);
         if (res.data.error || !res.data.token) {
           return {
             type: "LOGIN_FAIL"

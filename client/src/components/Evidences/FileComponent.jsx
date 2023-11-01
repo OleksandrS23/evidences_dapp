@@ -43,7 +43,7 @@ function FileComponent(props) {
   
   const handleVerify = async () => {
     try {
-      console.log(file)
+      //console.log(file)
         const url = consts.API_URL + `files/${file.fileId}` ;
 
         axios.post(url, {fileHash: file.fileHash, fileName:file.fileName}).then(

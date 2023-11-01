@@ -40,7 +40,7 @@ function AddAllowedUsers(props) {
     if (inputValue.trim() !== '') {
       setItems([...items, inputValue]);
       setInputValue('');
-      console.log(items)
+      //console.log(items)
     }
   };
 

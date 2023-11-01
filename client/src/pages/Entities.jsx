@@ -20,7 +20,7 @@ function Entities(props) {
         method= "getEntities"
         render={(entitiesData, loading) => {
           if (!loading && entitiesData) {
-            console.log(entitiesData)
+            //console.log(entitiesData)
             return <EntitiesCard EntitiesData={entitiesData} drizzleContext={drizzleContext} />;
           }
         }}

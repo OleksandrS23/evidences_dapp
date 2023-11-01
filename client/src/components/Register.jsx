@@ -32,7 +32,7 @@ function RegisterComponent(props) {
       }
 
     if (form.checkValidity() && passwordMatch) {
-        console.log(1)
+        //console.log(1)
        const contractInstance = drizzle.contracts.EvidenceChain;
        const methodArgs = [
         drizzleState.accounts[0],
@@ -49,7 +49,7 @@ function RegisterComponent(props) {
        setValidated(false);
        onClose();
     } else {
-        console.log(2)
+        //console.log(2)
        setValidated(true);
      }
   };

@@ -22,10 +22,10 @@ function EntitiesCard(props) {
         if (
           entities.entityAddress == drizzleContext.drizzleState.accounts[0]
         ) {
-          console.log(true);
+          //console.log(true);
           condition = true;
         } else {
-          console.log(false);
+          //console.log(false);
           condition = false;
         }
         return (
@@ -43,7 +43,7 @@ function EntitiesCard(props) {
             >
               <CardActionArea
                 onClick={(event) => {
-                  console.log(entities.entityAddress);
+                  //console.log(entities.entityAddress);
                 }}
               >
                 <CardContent>

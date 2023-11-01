@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UploadController } from './upload.controller';
 import { UploadService  } from './Service/upload.service';
 import { EthereumService } from 'src/ethereum/ethereum.service';
+import { ChangeStreamService } from './Service/changeStream.service';
 //import { File, FileSchema } from './Schema/file.schema';
 
 @Module({
@@ -10,6 +11,6 @@ import { EthereumService } from 'src/ethereum/ethereum.service';
     MongooseModule.forFeature([]),
   ],
   controllers: [UploadController],
-  providers: [UploadService, EthereumService],
+  providers: [UploadService, EthereumService, ChangeStreamService],
 })
 export class UploadModule {}

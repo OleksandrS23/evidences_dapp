@@ -9,9 +9,9 @@ function LoginComponent(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData)
+    //console.log(formData)
     const account = drizzleContext.drizzleState.accounts[0];
-    console.log(account)
+    //console.log(account)
     login(account, formData.username, formData.password, err => {
         // if (err)
         //      alert(err)
