@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { InjectConnection } from '@nestjs/mongoose';
-import { Connection} from 'mongoose';
+import { InjectConnection , InjectModel } from '@nestjs/mongoose';
+import { Connection, Model } from 'mongoose';
+import { ChangeData } from './Schema/changes.schema';
 
 @Injectable()
 export class ChangeStreamService {
 
-    private gridFs: any;
     private collection: any;
-    private logs : any;
-  constructor(@InjectConnection() private readonly connection: Connection) {
+
+  constructor(@InjectModel(ChangeData.name)
+  private model: Model<ChangeData>, @InjectConnection() private readonly connection: Connection) {
     this.collection = this.connection.db.collection('fs.chunks')
     console.log("WHERE")
     this.initChangeStream();
@@ -19,14 +20,8 @@ export class ChangeStreamService {
     const changeStream = this.collection.watch();
 
     changeStream.on('change', (change) => {
-      // Processar a alteração aqui
-      console.log('Change detected:', change);
-
-      this.logs = this.logs + change;
+      const createdData = new this.model(change);
+      createdData.save();
     });
-  }
-
-  public returnLogs(){
-    return this.logs;
   }
 }

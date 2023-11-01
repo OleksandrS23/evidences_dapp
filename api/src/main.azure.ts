@@ -8,7 +8,7 @@ import 'dotenv/config';
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
-  console.log("main")
+  
   // app.use(cors({
   //   origin: 'https://evidencesdapp.azurewebsites.net/', // Replace with the URL of your frontend app
   //   methods: ['GET', 'POST'], // Add other methods as needed
