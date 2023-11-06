@@ -11,7 +11,6 @@ export class ChangeStreamService {
   constructor(@InjectModel(ChangeData.name)
   private model: Model<ChangeData>, @InjectConnection() private readonly connection: Connection) {
     this.collection = this.connection.db.collection('fs.chunks')
-    console.log("WHERE")
     this.initChangeStream();
   }
 
