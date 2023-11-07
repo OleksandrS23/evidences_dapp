@@ -47,7 +47,7 @@ contract EntitiesManager {
         Entity memory entityToBeApproved = getLastUpdate(_entityToBeApproved);
         require(entityToBeApproved.isApproved == false, "Already Approved");
         
-        entitiesHistory[_entityToBeApproved].push(Entity(entityToBeApproved.userName, entityToBeApproved.password, entityToBeApproved.name, entityToBeApproved.departmentCode, entity.entityType, entityToBeApproved.entityAddress,  block.timestamp, true, _entity));
+        entitiesHistory[_entityToBeApproved].push(Entity(entityToBeApproved.userName, entityToBeApproved.password, entityToBeApproved.name, entityToBeApproved.departmentCode, entityToBeApproved.entityType, entityToBeApproved.entityAddress,  block.timestamp, true, _entity));
     }
 
     function getEntities() public view returns (address[] memory) {
